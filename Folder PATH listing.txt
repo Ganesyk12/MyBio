@@ -1,0 +1,25 @@
+Folder PATH listing for volume OS
+Volume serial number is 8ED3-0CBD
+C:.
+├───controllers
+├───models
+├───prisma
+├───public
+│   ├───css
+│   ├───img
+│   ├───js
+│   ├───scss
+│   └───vendor
+├───routes
+├───views
+│   ├───components
+│   │	├───footer.ejs
+│   │   └───header.ejs
+│   ├───layouts
+│   │   └───main.ejs
+│   ├───home.ejs
+│   └───about.ejs
+├───.env
+├───index.js
+├───package.json
+└───vercel.json

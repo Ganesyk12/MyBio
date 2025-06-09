@@ -1,0 +1,81 @@
+<section id="about" class="about section light-background">
+
+    <div class="container section-title" data-aos="fade-down">
+        <h2>About Me</h2>
+        <div class="title-shape">
+            <svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 0,10 C 40,0 60,20 100,10 C 140,0 160,20 200,10" fill="none" stroke="currentColor"
+                    stroke-width="2"></path>
+            </svg>
+        </div>
+
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row align-items-center">
+            <div class="col-lg-5 position-relative" data-aos="fade-right" data-aos-delay="200">
+                <div class="about-image">
+                    <img src="/img/profile/profile.jpg" alt="Profile Image" class="img-fluid rounded-5"
+                        style="max-width: 75%; display: block; margin: 0 auto;">
+                </div>
+            </div>
+            <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
+                <div class="about-content">
+                    <h2 style="text-align: center;">IT Developer &amp; Web Programmer</h2>
+                    <p class="lead-4" style="text-align: justify;">
+                        I'm an Informatics Engineer with two years of experience in software development and project
+                        management within the retail and manufacturing sectors. Known for being diligent, responsible,
+                        and collaborative, I actively build personal projects and have completed several application
+                        projects as part of that initiative to enhance my skills and professional growth.</p>
+                    <div class="personal-info">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <span class="label">Name</span>
+                                    <span class="value">Ganes Yudha Kusuma</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <span class="label">Phone</span>
+                                    <span class="value">0857 8107 9860</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <span class="label">Birthday</span>
+                                    <span class="value">October 12, 2002</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <span class="label">Email</span>
+                                    <span class="value">ganesyudhakusuma @gmail.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h4 class="lead-4 mt-2 text-center"><b>Skills</b></h4>
+                    </div>
+                    <div class="row justify-content-center">
+                        <% if (skills && skills.length> 0) { %>
+                            <% skills.forEach(function(skill) { %>
+                                <div class="col-6 col-sm-4 col-md-3 col-lg-3 text-center my-2">
+                                    <h5>
+                                        <span class="badge" style="background-color: #ff9100; color: white; padding: 6px 8px; border-radius: 4px; display: block; width: 100%;">
+                                            <%= skill.SkillName %>
+                                        </span>
+                                    </h5>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="col-12 text-center">
+                                <p>No skills available.</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

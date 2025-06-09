@@ -1,0 +1,62 @@
+<section id="portfolio-details" class="portfolio-details section">
+    <div class="container" data-aos="fade-down">
+        <div class="text-left mb-3">
+            <a href="/project" class="btn btn-secondary text-white">
+                &larr; Back to Portfolio
+            </a>
+        </div>
+        <% project.ProjectDetail.forEach(detail=> { %>
+            <div class="row gy-4 g-lg-5">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <img src="<%= detail.FilePath %>" class="img-fluid mb-4" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="position-sticky" style="top: 40px">
+                        <div class="portfolio-description">
+                            <h2>
+                                <%= project.ProjectName %>
+                            </h2>
+                            <p>
+                                <%= detail.Description %>
+                            </p>
+                        </div>
+                        <div class="portfolio-info mt-5">
+                            <h3>Project information</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Category</strong>
+                                            <h5>
+                                                <%= project.TypeName %>
+                                            </h5>
+                                        </li>
+                                        <li><strong>Project date</strong>
+                                            <%= detail.DateCreated.toDateString() %>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Skills</strong>
+                                            <h5>
+                                                <%= detail.SkillName %>
+                                            </h5>
+                                        </li>
+                                        <li><strong>Project URL</strong> <a href="<%= detail.Link %>">Visit Link</a></li>
+                                        <!-- <li><a href="#" class="btn-visit align-self-start">Visit Website</a></li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <% }) %>
+    </div>
+</section>

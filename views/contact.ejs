@@ -1,0 +1,114 @@
+<section id="contact" class="contact section light-background">
+
+    <div class="container" data-aos="fade-down" data-aos-delay="100">
+
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="content" data-aos="fade-up" data-aos-delay="200">
+                    <h2 class="display-5 mb-4">Contacts</h2>
+                    <p class="lead mb-4" style="text-align: justify;">Glad you've explored my portfolio! If you have a
+                        project or idea you'd like to
+                        discuss, or just want to chat about technology, feel free to reach out.</p>
+                    <div class="contact-info mt-5">
+                        <div class="info-item d-flex mb-3">
+                            <i class="bi bi-envelope-at me-3"></i>
+                            <span>ganesyudhakusuma@gmail.com</span>
+                        </div>
+                        <div class="info-item d-flex mb-3">
+                            <i class="bi bi-telephone me-3"></i>
+                            <span>+62 857-8107-9860</span>
+                        </div>
+                        <div class="info-item d-flex mb-4">
+                            <i class="bi bi-geo-alt me-3"></i>
+                            <span>Bekasi, Jawa Barat, Indonesia</span>
+                        </div>
+                        <div class="map-link d-inline-flex align-items-center">
+                            Contacts Us
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Email Sent -->
+            <div class="col-lg-6">
+                <div class="contact-form card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-body p-3 p-lg-5">
+                        <form method="post" class="email-form" action="#">
+                            <div class="row gy-4">
+                                <div class="col-12">
+                                    <input type="text" name="name" class="form-control" placeholder="Your Name"
+                                        required="">
+                                </div>
+                                <div class="col-12 ">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email"
+                                        required="">
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" name="subject" placeholder="Subject"
+                                        required="">
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control" name="message" rows="3" placeholder="Message"
+                                        required=""></textarea>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <div id="loading" class="loading">Loading</div>
+                                    <div id="error-message" class="alert alert-danger error-message d-none"
+                                        role="alert"></div>
+                                    <div id="sent-message" class="alert alert-success sent-message d-none" role="alert">
+                                        Your message has been sent. Thank you!
+                                    </div>
+                                    <button type="submit" class="btn btn-submit w-100">Submit Message</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.querySelector(".email-form");
+        const loading = document.getElementById("loading");
+        const errorMessage = document.getElementById("error-message");
+        const sentMessage = document.getElementById("sent-message");
+        // Pastikan semua disembunyikan awalnya
+        loading.classList.add("d-none");
+        errorMessage.classList.add("d-none");
+        sentMessage.classList.add("d-none");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            loading.classList.remove("d-none");
+            errorMessage.classList.add("d-none");
+            sentMessage.classList.add("d-none");
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            try {
+                const response = await fetch("/submitEmail", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                loading.classList.add("d-none");
+                if (response.ok && result.success) {
+                    sentMessage.classList.remove("d-none");
+                    form.reset();
+                } else {
+                    errorMessage.textContent = result.message || "Failed to send message.";
+                    errorMessage.classList.remove("d-none");
+                }
+            } catch (error) {
+                loading.classList.add("d-none");
+                errorMessage.textContent = "An error occurred. Please try again.";
+                errorMessage.classList.remove("d-none");
+            }
+        });
+    });
+</script>

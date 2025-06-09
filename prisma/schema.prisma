@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model EmailReceive {
+  IdMail Int @id @default(autoincrement())
+  Name String
+  Email String
+  Subject String
+  Message String
+  Status String?
+  DateCreate DateTime @default(now())  
+}
+
+model Project {
+  IdProject Int @id @default(autoincrement())
+  IdType Int
+  ProjectName String
+  DateCreated DateTime @default(now())
+  ProjectDetail ProjectDetail[]
+
+  ProjectType ProjectType @relation(fields: [IdType], references: [IdType])
+}
+
+model ProjectType {
+  IdType Int @id @default(autoincrement())
+  TypeName String
+
+  Project Project[]
+}
+
+model ProjectDetail {
+  IdProjectDetail Int @id @default(autoincrement())
+  IdProject Int
+  IdSkill Int
+  Description String
+  FilePath String
+  Link String?
+  DateCreated DateTime @default(now())
+
+  Project Project @relation(fields: [IdProject], references: [IdProject])
+  Skill Skill @relation(fields: [IdSkill], references: [IdSkill])
+}
+
+model Skill {
+  IdSkill Int @id @default(autoincrement())
+  SkillName String
+  DateCreated DateTime @default(now())
+  Status String?
+  ProjectDetail ProjectDetail[]
+}
