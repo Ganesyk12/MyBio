@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prismaClient.js";
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export class BaseModel {
     static async getListSkill() {
