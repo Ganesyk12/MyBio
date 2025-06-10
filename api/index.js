@@ -28,7 +28,11 @@ app.set('views', path.join(__dirname, '..', 'views'));
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
-
+// Handle favicon (biar ga timeout)
+app.get("/favicon.ico", (req, res) => res.status(204).end());
+app.use((req, res) => {
+  res.status(404).send("Not Found");
+});
 // Routing
 app.use('/', pageRoutes);
 
