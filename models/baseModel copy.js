@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export class BaseModel {
+export class UniversModel {
     static async getListSkill() {
         try {
             const skills = await prisma.skill.findMany({

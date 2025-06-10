@@ -1,13 +1,14 @@
 import { prisma } from "../lib/prismaClient.js";
+import { withTimeout } from "../utils/withTimeout.js"; 
 // const prisma = new PrismaClient();
 
 export class BaseModel {
     static async getListSkill() {
         try {
-            const skills = await prisma.skill.findMany({
+            const skills = await withTimeout(prisma.skill.findMany({
                 orderBy: { SkillName: 'asc' },
                 where: { Status: 'A' }
-            });
+            }));
             return skills;
         } catch (error) {
             throw new Error("Failed to retrieve skills");
@@ -16,15 +17,16 @@ export class BaseModel {
 
     static async getProjectType() {
         try {
-            const type = await prisma.projectType.findMany({
+            const type = await withTimeout(prisma.projectType.findMany({
                 orderBy: { TypeName: 'asc' },
                 select: {
                     IdType: true,
                     TypeName: true
                 }
-            });
+            }));
             // Ambil semua project dan detail + type-nya
-            const project = await prisma.project.findMany({
+            const project = await withTimeout(prisma.project.findMany({
+                take: 10,
                 include: {
                     ProjectDetail: {
                         select: { FilePath: true }
@@ -34,7 +36,7 @@ export class BaseModel {
                     }
                 },
                 orderBy: { IdProject: 'asc' }
-            });
+            }));
             // Gabungkan data ProjectType ke dalam tiap project
             const formattedProjects = project.map(p => ({
                 ...p,
@@ -49,7 +51,7 @@ export class BaseModel {
 
     static async getProjectDetail(idProject) {
         try {
-            const projects = await prisma.project.findFirst({
+            const projects = await withTimeout(prisma.project.findFirst({
                 where: { IdProject: Number(idProject) },
                 select: {
                     IdProject: true,
@@ -60,6 +62,7 @@ export class BaseModel {
                         }
                     },
                     ProjectDetail: {
+                        take: 10,
                         select: {
                             FilePath: true,
                             Description: true,
@@ -73,7 +76,7 @@ export class BaseModel {
                         }
                     }
                 }
-            });
+            }));
 
             if (!projects) {
                 throw new Error("Project not found");
@@ -122,7 +125,7 @@ export class BaseModel {
             const { name, email, subject, message } = data;
             const { startOfToday, endOfToday } = this.getTodayDateRange();
             // Cek apakah email dengan alamat yang sama sudah dikirim hari ini
-            const existing = await prisma.emailReceive.findFirst({
+            const existing = await withTimeout(prisma.emailReceive.findFirst({
                 where: {
                     Email: email,
                     DateCreate: {
@@ -130,7 +133,7 @@ export class BaseModel {
                         lte: endOfToday
                     }
                 }
-            });
+            }));
             if (existing) {
                 return {
                     success: false,
@@ -138,7 +141,7 @@ export class BaseModel {
                 };
             }
             // Simpan data baru
-            await prisma.emailReceive.create({
+            await withTimeout(prisma.emailReceive.create({
                 data: {
                     Name: name,
                     Email: email,
@@ -146,7 +149,7 @@ export class BaseModel {
                     Message: message,
                     Status: "A"
                 }
-            });
+            }));
             return {
                 success: true,
                 message: "Email saved successfully."
