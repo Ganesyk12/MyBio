@@ -33,4 +33,4 @@ app.set('layout', 'layouts/main');
 app.use('/', pageRoutes);
 
 // Export as serverless function
-export const handler = serverless(app);
+export default serverless(app);
