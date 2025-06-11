@@ -4,9 +4,11 @@ export class BaseController {
     static async getHome(req, res) {
         try {
             // Render the index view with a title
+            const isAjax = req.xhr;
             res.render('index', {
                 title: 'Portfolio | Ganes Yudha Kusuma',
-                activePage: 'index'
+                activePage: 'index',
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             // Handle any errors that occur during rendering
@@ -18,10 +20,12 @@ export class BaseController {
     static async getAboutPage(req, res) {
         try {
             const skills = await BaseModel.getListSkill();
+            const isAjax = req.xhr;
             res.render('about', {
                 title: 'About | Portfolio Ganes',
                 activePage: 'about',
-                skills: skills
+                skills: skills,
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             console.error('Error rendering about page:', error);
@@ -31,9 +35,11 @@ export class BaseController {
 
     static async getResumePage(req, res) {
         try {
+            const isAjax = req.xhr;
             res.render('resume', {
                 title: 'Resume | Portfolio Ganes',
-                activePage: 'resume'
+                activePage: 'resume',
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             console.error('Error rendering resume page:', error);
@@ -44,12 +50,11 @@ export class BaseController {
     static async getProjectPage(req, res) {
         try {
             const { type, project } = await BaseModel.getProjectType();
-
             res.render('portfolio', {
                 title: 'Project | Portfolio Ganes',
                 activePage: 'project',
                 type,
-                project
+                project,
             });
         } catch (error) {
             console.error('Error rendering portfolio page:', error);
@@ -59,9 +64,11 @@ export class BaseController {
 
     static async getServicePage(req, res) {
         try {
+            const isAjax = req.xhr;
             res.render('services', {
                 title: 'Services | Portfolio Ganes',
-                activePage: 'services'
+                activePage: 'services',
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             console.error('Error rendering services page:', error);
@@ -71,9 +78,11 @@ export class BaseController {
 
     static async getContactPage(req, res) {
         try {
+            const isAjax = req.xhr;
             res.render('contact', {
                 title: 'Contact | Portfolio Ganes',
-                activePage: 'contact'
+                activePage: 'contact',
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             console.error('Error rendering contact page:', error);
@@ -103,18 +112,23 @@ export class DataProcessing {
     // Route: /projectDetail/:id
     static async getProjectDetail(req, res) {
         try {
+            const isAjax = req.xhr;
             const idProject = parseInt(req.params.id);
-            if (isNaN(idProject)) return res.status(400).send("Invalid ID");
-            const project = await BaseModel.getProjectDetail(idProject);
 
+            if (isNaN(idProject)) return res.status(400).send("Invalid ID");
+
+            const project = await BaseModel.getProjectDetail(idProject);
             if (!project || project.length === 0) {
-                return res.status(404).render('404', { message: 'Project not found' });
+                return res.status(404).render('404', {
+                    message: 'Project not found'
+                });
             }
 
             res.render('portodetail', {
                 title: 'Detail Project | Ganes Yudha Kusuma',
                 activePage: 'projectdetail',
-                project
+                project,
+                layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {
             console.error('Error rendering portfolio page:', error);

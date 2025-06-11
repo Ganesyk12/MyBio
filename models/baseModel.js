@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prismaClient.js";
-import { withTimeout } from "../utils/withTimeout.js"; 
+import { withTimeout } from "../utils/withTimeout.js";
 // const prisma = new PrismaClient();
 
 export class BaseModel {
@@ -17,31 +17,43 @@ export class BaseModel {
 
     static async getProjectType() {
         try {
-            const type = await withTimeout(prisma.projectType.findMany({
-                orderBy: { TypeName: 'asc' },
-                select: {
-                    IdType: true,
-                    TypeName: true
-                }
-            }));
-            // Ambil semua project dan detail + type-nya
-            const project = await withTimeout(prisma.project.findMany({
-                take: 10,
-                include: {
-                    ProjectDetail: {
-                        select: { FilePath: true }
-                    },
-                    ProjectType: {
-                        select: { TypeName: true, IdType: true }
+            const type = await withTimeout(
+                prisma.projectType.findMany({
+                    orderBy: { TypeName: 'asc' },
+                    select: {
+                        IdType: true,
+                        TypeName: true
                     }
-                },
-                orderBy: { IdProject: 'asc' }
-            }));
+                }));
+            // Ambil semua project dan detail + type-nya
+            const project = await withTimeout(
+                prisma.project.findMany({
+                    orderBy: { IdProject: 'asc' },
+                    select: {
+                        IdProject: true,
+                        ProjectName: true,
+                        ProjectType: {
+                            select: {
+                                IdType: true,
+                                TypeName: true
+                            }
+                        },
+                        ProjectDetail: {
+                            select: {
+                                FilePath: true
+                            },
+                            take: 1
+                        }
+                    }
+                })
+            );
             // Gabungkan data ProjectType ke dalam tiap project
             const formattedProjects = project.map(p => ({
-                ...p,
+                IdProject: p.IdProject,
+                ProjectName: p.ProjectName,
                 TypeName: p.ProjectType.TypeName,
-                IdType: p.ProjectType.IdType
+                IdType: p.ProjectType.IdType,
+                FilePath: p.ProjectDetail?.[0]?.FilePath || null
             }));
             return { type, project: formattedProjects };
         } catch (error) {

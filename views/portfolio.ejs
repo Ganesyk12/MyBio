@@ -25,33 +25,24 @@
             <div class="row g-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
                 <div class="row g-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
                     <% project.forEach(p=> { %>
-                        <% if (p.ProjectDetail && p.ProjectDetail.length> 0) { %>
-                            <% p.ProjectDetail.forEach( detail=> { %>
-                                <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-<%= p.IdType %>">
-                                    <div class="portfolio-card">
-                                        <div class="portfolio-image">
-                                            <img src="<%= detail.FilePath %>" class="img-fluid" alt="" loading="lazy">
-                                            <div class="portfolio-overlay">
-                                                <div class="portfolio-actions">
-                                                    <a href="<%= detail.FilePath %>" class="glightbox preview-link"
-                                                        data-gallery="portfolio-gallery-web"><i
-                                                            class="bi bi-eye"></i></a>
-                                                    <a href="/projectDetail/<%= p.IdProject %>" class="details-link"><i
-                                                            class="bi bi-arrow-right"></i></a>
-                                                </div>
+                        <% if (p.FilePath) { %>
+                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-<%= p.IdType %>">
+                                <div class="portfolio-card">
+                                    <div class="portfolio-image">
+                                        <img src="<%= p.FilePath %>" class="img-fluid" alt="<%= p.ProjectName %>" loading="lazy">
+                                        <div class="portfolio-overlay">
+                                            <div class="portfolio-actions">
+                                                <a href="<%= p.FilePath %>" class="glightbox preview-link" data-gallery="portfolio-gallery-web"><i class="bi bi-eye"></i></a>
+                                                <a href="/projectDetail/<%= p.IdProject %>" class="details-link"><i class="bi bi-arrow-right"></i></a>
                                             </div>
                                         </div>
-                                        <div class="portfolio-content">
-                                            <span class="category">
-                                                <%= p.TypeName %>
-                                            </span>
-                                            <h3>
-                                                <%= p.ProjectName %>
-                                            </h3>
-                                        </div>
+                                    </div>
+                                    <div class="portfolio-content">
+                                        <span class="category"><%= p.TypeName %></span>
+                                        <h3><%= p.ProjectName %></h3>
                                     </div>
                                 </div>
-                            <% }) %>
+                            </div>
                         <% } %>
                     <% }) %>
                 </div>
