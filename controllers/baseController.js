@@ -78,11 +78,9 @@ export class BaseController {
 
     static async getContactPage(req, res) {
         try {
-            const isAjax = req.xhr;
             res.render('contact', {
                 title: 'Contact | Portfolio Ganes',
-                activePage: 'contact',
-                layout: isAjax ? false : 'layouts/main'
+                activePage: 'contact'
             });
         } catch (error) {
             console.error('Error rendering contact page:', error);

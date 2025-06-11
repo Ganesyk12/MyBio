@@ -20,7 +20,7 @@
                             <h2>
                                 <%= project.ProjectName %>
                             </h2>
-                            <p>
+                            <p style="text-align: justify;">
                                 <%= detail.Description %>
                             </p>
                         </div>
@@ -30,23 +30,25 @@
                                 <div class="col-md-6">
                                     <ul>
                                         <li><strong>Category</strong>
-                                            <h5>
+                                            <h6>
                                                 <%= project.TypeName %>
-                                            </h5>
+                                            </h6>
                                         </li>
                                         <li><strong>Project date</strong>
-                                            <%= detail.DateCreated.toDateString() %>
+                                            <h6>
+                                                <%= detail.DateCreated.toDateString() %>
+                                            </h6>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
                                     <ul>
                                         <li><strong>Skills</strong>
-                                            <h5>
+                                            <h6>
                                                 <%= detail.SkillName %>
-                                            </h5>
+                                            </h6>
                                         </li>
-                                        <li><strong>Project URL</strong> <a href="<%= detail.Link %>">Visit Link</a></li>
+                                        <li><strong>Project URL</strong> <h6><a href="<%= detail.Link %>" target="_blank">Visit Link</a></h6></li>
                                         <!-- <li><a href="#" class="btn-visit align-self-start">Visit Website</a></li> -->
                                     </ul>
                                 </div>
