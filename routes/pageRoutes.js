@@ -1,7 +1,6 @@
 import express from 'express';
 import { BaseController, DataProcessing } from '../controllers/baseController.js';
 
-
 const router = express.Router();
 // Page Route
 router.get('/', BaseController.getHome);
