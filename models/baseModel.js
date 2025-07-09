@@ -1,6 +1,5 @@
 import { prisma } from "../lib/prismaClient.js";
 import { withTimeout } from "../utils/withTimeout.js";
-// const prisma = new PrismaClient();
 
 export class BaseModel {
     static async getListSkill() {
