@@ -42,13 +42,29 @@ jobs:
           echo "Building image: $IMAGE_NAME"
           docker build -t "$IMAGE_NAME" .
           docker push "$IMAGE_NAME"
-          echo "IMAGE_TO_DEPLOY=$IMAGE_NAME" >> $GITHUB_ENV
+          echo "${IMAGE_NAME}" > image_to_deploy.txt
+          
+      - name: Upload image tag artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-tag
+          path: image_to_deploy.txt
 
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
     environment: sites
     steps:
+      - name: Download image tag artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag
+
+      - name: Read image name to env
+        run: |
+          IMAGE=$(cat image_to_deploy.txt)
+          echo "IMAGE_TO_DEPLOY=$IMAGE" >> $GITHUB_ENV
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         env:
