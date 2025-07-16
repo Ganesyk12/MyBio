@@ -1,14 +1,16 @@
-name: Deploy Express App to EC2 via Docker
+name: Deploy Apps to EC2
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     environment: sites
+    outputs:
+      full_image_name: ${{ secrets.DOCKER_REPO }}:${{ steps.get_version.outputs.IMAGE_TAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,47 +20,74 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Get current date and commit SHA for image tagging
+        id: get_version
+        run: |
+          # Membersihkan nama branch untuk digunakan sebagai bagian dari tag image Docker
+          RAW_BRANCH_NAME="${{ github.ref_name }}"
+          CLEANED_BRANCH_NAME=$(echo "$RAW_BRANCH_NAME" | sed 's/\//-/g' | tr -cd '[:alnum:]._-' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]\+/-/g')
 
-      - name: Build and push Docker image
+          if [ -z "$CLEANED_BRANCH_NAME" ]; then
+            CLEANED_BRANCH_NAME="default-branch"
+          fi
+
+          # Membuat tanggal dan SHA commit singkat untuk tagging image yang unik
+          DATE=$(date +%m%d%H%M)
+          SHA=$(echo ${{ github.sha }} | cut -c1-7)
+
+          # Membangun tag image akhir
+          IMAGE_TAG="${CLEANED_BRANCH_NAME}-${DATE}-${SHA}"
+          echo "Generated image tag: ${IMAGE_TAG}"
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "SHA=${SHA}" >> $GITHUB_OUTPUT
+          echo "BRANCH_NAME_CLEANED=${CLEANED_BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image to Docker Hub
         id: docker_build
-        uses: docker/build-and-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_REPO }}:latest
+        env:
+          FULL_IMAGE_NAME: ${{ secrets.DOCKER_REPO }}:${{ steps.get_version.outputs.IMAGE_TAG }}
+        run: |
+          docker build -t ${{ env.FULL_IMAGE_NAME }} .
+          docker push ${{ env.FULL_IMAGE_NAME }}
 
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    environment: production
+    environment: sites
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ec2-user # Sesuaikan jika berbeda
+          username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
           script: |
             echo "Starting deployment on EC2..."
-            sudo systemctl start docker || true
-            sudo systemctl enable docker || true
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            echo "Pulling latest Docker image..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/mypage-porto:latest
-            echo "Stopping and removing old container (if any)..."
-            docker stop mypage-porto-app || true
-            docker rm mypage-porto-app || true
-            echo "Running new container..."
-            docker run -d \
-              --name mypage-porto-app \
-              -p ${{ secrets.HOST_PORT }}:${{ secrets.APP_PORT }} \
-              --restart always \
-              -e NODE_ENV=production \
-              -e PORT=${{ vars.PORT }} \
-              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-              ${{ secrets.DOCKER_USERNAME }}/mypage-porto:latest
+            IMAGE_TO_DEPLOY="${{ needs.build-and-push.outputs.full_image_name }}"
+            CONTAINER_NAME="personal-platforms"
 
-            echo "Deployment finished. Cleaning up old images..."
-            docker image prune -f
-            echo "Deployment complete!"
+            echo "Stopping and removing old container: ${CONTAINER_NAME}"
+            docker stop "${CONTAINER_NAME}" || true
+            docker rm "${CONTAINER_NAME}" || true
+
+            echo "Pulling new image: ${IMAGE_TO_DEPLOY}"
+            docker pull "${IMAGE_TO_DEPLOY}"
+
+            NODE_ENV_CLEAN=$(echo "development" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            PORT_CLEAN=$(echo "${{ vars.PORT }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            DATABASE_URL_CLEAN=$(echo "${{ secrets.DATABASE_URL }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+            echo "Running new container: ${CONTAINER_NAME} on port ${PORT_CLEAN}"
+            docker run -d \
+              -p "${PORT_CLEAN}":5000 \
+              --name "${CONTAINER_NAME}" \
+              -e NODE_ENV="${NODE_ENV_CLEAN}" \
+              -e PORT="${PORT_CLEAN}" \
+              -e DATABASE_URL="${DATABASE_URL_CLEAN}" \
+              --restart=always \
+              "${IMAGE_TO_DEPLOY}"
+
+            echo "Deployment successful for ${IMAGE_TO_DEPLOY}!"
+            docker image prune -f # Membersihkan image lama yang tidak terpakai
+            echo "Old images pruned."
