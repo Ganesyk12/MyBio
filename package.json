@@ -2,7 +2,7 @@
   "name": "mypage-porto",
   "version": "1.0.0",
   "description": "",
-  "main": "api/index.js",
+  "main": "index.js",
   "scripts": {
     "build": "npx prisma generate",
     "postinstall": "prisma generate",
