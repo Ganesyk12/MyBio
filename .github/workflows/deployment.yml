@@ -55,20 +55,23 @@ jobs:
     runs-on: ubuntu-latest
     environment: sites
     steps:
-      - name: Download image tag artifact
+      - name: Download image tag artifact (opsional, hanya jika pakai file)
         uses: actions/download-artifact@v4
         with:
           name: image-tag
           path: .
-
-      - name: Read image name to env
+          
+      - name: Sanity check image tag
+        id: read_image
         run: |
-          IMAGE=$(cat image_to_deploy.txt)
+          IMAGE=$(cat image_to_deploy.txt | tr -d '\n\r' | xargs)
           if [ -z "$IMAGE" ]; then
             echo "❌ ERROR: IMAGE_TO_DEPLOY is empty!"
             exit 1
           fi
+          echo "✅ IMAGE_TO_DEPLOY read: $IMAGE"
           echo "IMAGE_TO_DEPLOY=$IMAGE" >> $GITHUB_ENV
+          echo "IMAGE_TO_DEPLOY=$IMAGE" >> $GITHUB_OUTPUT
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -78,6 +81,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: IMAGE_TO_DEPLOY
           script: |
             echo "Starting deployment on EC2..."
             CONTAINER_NAME="personal-platforms"
@@ -93,7 +97,6 @@ jobs:
             PORT_CLEAN=$(echo "${{ vars.PORT }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
             DATABASE_URL_CLEAN=$(echo "${{ secrets.DATABASE_URL }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
-            echo "Running new container: ${CONTAINER_NAME} on port ${PORT_CLEAN}"
             docker run -d \
               -p "${PORT_CLEAN}":5000 \
               --name "${CONTAINER_NAME}" \
@@ -103,6 +106,6 @@ jobs:
               --restart=always \
               "${IMAGE_TO_DEPLOY}"
 
-            echo "Deployment successful for ${IMAGE_TO_DEPLOY}!"
+            echo "Deployment successful for ${IMAGE_TO_DEPLOY}! New container: ${CONTAINER_NAME} on port ${PORT_CLEAN}"
             docker image prune -f
             echo "Old images pruned."
