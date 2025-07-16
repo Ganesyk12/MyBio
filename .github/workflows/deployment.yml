@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: sites
     outputs:
-      full_image_name: ${{ secrets.DOCKER_REPO }}:${{ steps.get_version.outputs.IMAGE_TAG }}
+      full_image_name: ${{ steps.docker_build.outputs.image_name_pushed }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,7 +24,6 @@ jobs:
       - name: Get current date and commit SHA for image tagging
         id: get_version
         run: |
-          # Membersihkan nama branch untuk digunakan sebagai bagian dari tag image Docker
           RAW_BRANCH_NAME="${{ github.ref_name }}"
           CLEANED_BRANCH_NAME=$(echo "$RAW_BRANCH_NAME" | sed 's/\//-/g' | tr -cd '[:alnum:]._-' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]\+/-/g')
 
@@ -32,7 +31,6 @@ jobs:
             CLEANED_BRANCH_NAME="default-branch"
           fi
 
-          # Membuat tanggal dan SHA commit singkat untuk tagging image yang unik
           DATE=$(date +%m%d%H%M)
           SHA=$(echo ${{ github.sha }} | cut -c1-7)
 
@@ -50,6 +48,7 @@ jobs:
         run: |
           docker build -t ${{ env.FULL_IMAGE_NAME }} .
           docker push ${{ env.FULL_IMAGE_NAME }}
+          echo "image_name_pushed=${{ env.FULL_IMAGE_NAME }}" >> $GITHUB_OUTPUT
 
   deploy:
     needs: build-and-push
@@ -89,5 +88,5 @@ jobs:
               "${IMAGE_TO_DEPLOY}"
 
             echo "Deployment successful for ${IMAGE_TO_DEPLOY}!"
-            docker image prune -f # Membersihkan image lama yang tidak terpakai
+            docker image prune -f
             echo "Old images pruned."
