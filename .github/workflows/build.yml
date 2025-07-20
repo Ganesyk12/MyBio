@@ -37,13 +37,12 @@ jobs:
             
             echo "Generated: IMAGE_TAG=${IMAGE_TAG}"
             echo "Generated: CONTAINER_NAME=${CONTAINER_NAME}"
-          env:
-            DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
                 
         -  name: Build and Push Docker Image
            run: |
-            docker build -t "${{ env.IMAGE_TAG }}" .
-            docker push "${{ env.IMAGE_TAG }}"
+            FULL_IMAGE="${DOCKER_REPO}:${IMAGE_TAG}"
+            docker build -t "${FULL_IMAGE}" .
+            docker push "${FULL_IMAGE}"
            env:
             DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
             IMAGE_TAG: ${{ steps.meta.outputs.IMAGE_TAG }}
@@ -59,3 +58,4 @@ jobs:
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DOCKER_REPO: ${{ secrets.DOCKER_REPO }}

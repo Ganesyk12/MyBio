@@ -19,6 +19,8 @@ on:
         required: true
       DATABASE_URL:
         required: true
+      DOCKER_REPO:
+        required: true
 
 jobs:
     deploy:
