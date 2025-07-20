@@ -33,7 +33,7 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               CONTAINER_NAME="${{ inputs.container_name }}"
-              IMAGE_TAG="${{ inputs.image_tag }}"
+              IMAGE_TAG="${{ secrets.DOCKER_REPO }}:${{ inputs.image_tag }}"
               
               docker stop "${CONTAINER_NAME}" || true
               docker rm "${CONTAINER_NAME}" || true
