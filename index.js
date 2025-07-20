@@ -35,6 +35,6 @@ app.use(express.static('public'));
 // Route Definition
 app.use('/', pageRoutes);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Express running Apps on http://localhost:${PORT}`);
 });

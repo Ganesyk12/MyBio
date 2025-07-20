@@ -1,111 +1,54 @@
-name: Deploy Apps to EC2
+# .github/workflows/deployment.yml
+name: Deploy Image
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      image_tag:
+        required: true
+        type: string
+      container_name:
+        required: true
+        type: string
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+      EC2_HOST:
+        required: true
+      EC2_USERNAME:
+        required: true
+      DATABASE_URL:
+        required: true
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    environment: sites
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    deploy:
+      runs-on: ubuntu-latest
+      environment: sites
+      steps:
+        - name: Deployment
+          uses: appleboy/ssh-action@v1.0.3
+          with:
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USERNAME }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            script: |
+              CONTAINER_NAME="${{ inputs.container_name }}"
+              IMAGE_TAG="${{ inputs.image_tag }}"
+              
+              docker stop "${CONTAINER_NAME}" || true
+              docker rm "${CONTAINER_NAME}" || true
+              docker pull "$IMAGE_TAG"
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Get current date and commit SHA for image tagging
-        id: get_version
-        run: |
-          CLEANED_BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/\//-/g' | tr -cd '[:alnum:]._-' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]\+/-/g')
-          if [ -z "$CLEANED_BRANCH_NAME" ]; then
-            CLEANED_BRANCH_NAME="default-branch"
-          fi
-
-          DATE=$(date +%m%d%H%M)
-          SHA=$(echo ${{ github.sha }} | cut -c1-7)
-
-          # Membangun tag image akhir
-          IMAGE_TAG="${CLEANED_BRANCH_NAME}-${DATE}-${SHA}"
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "Generated image tag: ${IMAGE_TAG}"
-
-      - name: Build and push Docker image to Docker Hub
-        id: docker_build
-        run: |
-          IMAGE_NAME="${{ secrets.DOCKER_REPO }}:${{ steps.get_version.outputs.IMAGE_TAG }}"
-          echo "Building image: $IMAGE_NAME"
-          docker build -t "$IMAGE_NAME" .
-          docker push "$IMAGE_NAME"
-          echo "${IMAGE_NAME}" > image_to_deploy.txt
-
-      - name: Upload image tag artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-tag
-          path: image_to_deploy.txt
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    environment: sites
-    steps:
-      - name: Download image tag artifact (opsional, hanya jika pakai file)
-        uses: actions/download-artifact@v4
-        with:
-          name: image-tag
-          path: .
-          
-      - name: Sanity check image tag
-        id: read_image
-        run: |
-          IMAGE=$(cat image_to_deploy.txt | tr -d '\n\r' | xargs)
-          if [ -z "$IMAGE" ]; then
-            echo "❌ ERROR: IMAGE_TO_DEPLOY is empty!"
-            exit 1
-          fi
-          echo "✅ IMAGE_TO_DEPLOY read: $IMAGE"
-          echo "IMAGE_TO_DEPLOY=$IMAGE" >> $GITHUB_ENV
-          echo "IMAGE_TO_DEPLOY=$IMAGE" >> $GITHUB_OUTPUT
-
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        env:
-          IMAGE_TO_DEPLOY: ${{ env.IMAGE_TO_DEPLOY }}
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: IMAGE_TO_DEPLOY
-          script: |
-            echo "Starting deployment on EC2..."
-            CONTAINER_NAME="personal-platforms"
-
-            echo "Stopping and removing old container: ${CONTAINER_NAME}"
-            docker stop "${CONTAINER_NAME}" || true
-            docker rm "${CONTAINER_NAME}" || true
-
-            echo "Pulling new image: ${IMAGE_TO_DEPLOY}"
-            docker pull "${IMAGE_TO_DEPLOY}"
-
-            NODE_ENV_CLEAN=$(echo "development" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-            PORT_CLEAN=$(echo "${{ vars.PORT }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-            DATABASE_URL_CLEAN=$(echo "${{ secrets.DATABASE_URL }}" | tr -d '\n\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-
-            docker run -d \
-              -p "${PORT_CLEAN}":5000 \
-              --name "${CONTAINER_NAME}" \
-              -e NODE_ENV="${NODE_ENV_CLEAN}" \
-              -e PORT="${PORT_CLEAN}" \
-              -e DATABASE_URL="${DATABASE_URL_CLEAN}" \
-              --restart=always \
-              "${IMAGE_TO_DEPLOY}"
-
-            echo "Deployment successful for ${IMAGE_TO_DEPLOY}! New container: ${CONTAINER_NAME} on port ${PORT_CLEAN}"
-            docker image prune -f
-            echo "Old images pruned."
+              docker run -d \
+                -p 8250:${{ vars.PORT }} \
+                --network tunnel \
+                --name "${CONTAINER_NAME}" \
+                -e NODE_ENV="production" \
+                -e PORT="${{ vars.PORT }}" \
+                -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+                --restart unless-stopped \
+                "$IMAGE_TAG"
+              echo "Deployment completed successfully."
+              
+              docker image prune -f
+              echo "Old images pruned."
