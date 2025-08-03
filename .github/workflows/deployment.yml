@@ -41,8 +41,18 @@ jobs:
               docker rm "${CONTAINER_NAME}" || true
               docker pull "$IMAGE_TAG"
 
+              # Generate random port antara 5000 dan 8500
+              while :
+              do
+                PORT_HOST=$(( ( RANDOM % 3500 ) + 5000 ))
+                if ! ss -tuln | grep -q ":$PORT_HOST "; then
+                  break
+                fi
+              done
+              echo "Random available port selected: $PORT_HOST"
+
               docker run -d \
-                -p 8250:${{ vars.PORT }} \
+                -p ${PORT_HOST}:${{ vars.PORT }} \
                 --network tunnel \
                 --name "${CONTAINER_NAME}" \
                 -e NODE_ENV="production" \

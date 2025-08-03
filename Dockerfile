@@ -1,8 +1,17 @@
-FROM node:20-slim
+FROM node:24.1.0-slim
 WORKDIR /app
+# Install system dependencies for Prisma engine
+RUN apt-get update && apt-get install -y \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm install --production
+# Set proper Prisma binary target
+ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
+# Install dependencies & generate Prisma client
+RUN npm ci && \
+    npx prisma generate
 COPY . .
 EXPOSE 5000
-CMD ["node", "index.js"]
+# Default start command
+CMD ["npm", "start"]
