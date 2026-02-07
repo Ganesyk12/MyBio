@@ -1,33 +1,33 @@
 <section id="portfolio-details" class="portfolio-details section">
     <div class="container" data-aos="fade-down">
-        <div class="text-left mb-3">
-            <a href="/project" class="btn btn-secondary text-white">
-                &larr; Back to Portfolio
+        <div class="mb-4">
+            <a href="/portfolio" class="btn-back-glass">
+                <i class="bi bi-arrow-left"></i> Back to Portfolio
             </a>
         </div>
         <% project.ProjectDetail.forEach(detail=> { %>
             <div class="row gy-4 g-lg-5">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <img src="<%= detail.FilePath %>" class="img-fluid mb-4" alt="img">
-                        </div>
+                <div class="col-lg-7">
+                    <div class="portfolio-details-card">
+                        <img src="<%= detail.FilePath %>" class="img-fluid" alt="img"
+                            style="width: 100%; display: block;">
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="position-sticky" style="top: 40px">
-                        <div class="portfolio-description">
-                            <h2>
+                <div class="col-lg-5">
+                    <div class="position-sticky" style="top: 100px">
+                        <div class="portfolio-description mb-5">
+                            <h2 class="text-accent mb-4"
+                                style="font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
                                 <%= project.ProjectName %>
                             </h2>
-                            <p style="text-align: justify;">
+                            <p style="text-align: justify; line-height: 1.8; opacity: 0.8;">
                                 <%= detail.Description %>
                             </p>
                         </div>
-                        <div class="portfolio-info mt-5">
-                            <h3>Project information</h3>
-                            <div class="row">
-                                <div class="col-md-6">
+                        <div class="portfolio-info">
+                            <h3>Project Information</h3>
+                            <div class="row gy-4">
+                                <div class="col-12 col-md-6">
                                     <ul>
                                         <li><strong>Category</strong>
                                             <h6>
@@ -41,20 +41,23 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6">
                                     <ul>
                                         <li><strong>Skills</strong>
                                             <h6>
                                                 <%= detail.SkillName %>
                                             </h6>
                                         </li>
-                                        <li><strong>Project URL</strong> <h6><a href="<%= detail.Link %>" target="_blank">Visit Link</a></h6></li>
+                                        <li><strong>Project URL</strong>
+                                            <h6><a href="<%= detail.Link %>" target="_blank" class="text-accent">Visit
+                                                    Link <i class="bi bi-box-arrow-up-right ms-1"
+                                                        style="font-size: 0.8rem;"></i></a></h6>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 

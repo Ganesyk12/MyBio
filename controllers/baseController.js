@@ -52,7 +52,7 @@ export class BaseController {
             const { type, project } = await BaseModel.getProjectType();
             res.render('portfolio', {
                 title: 'Project | Portfolio Ganes',
-                activePage: 'project',
+                activePage: 'portfolio',
                 type,
                 project,
             });
@@ -124,7 +124,7 @@ export class DataProcessing {
 
             res.render('portodetail', {
                 title: 'Detail Project | Ganes Yudha Kusuma',
-                activePage: 'projectdetail',
+                activePage: 'portfolio',
                 project,
                 layout: isAjax ? false : 'layouts/main'
             });

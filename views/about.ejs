@@ -26,53 +26,107 @@
                         management within the retail and manufacturing sectors. Known for being diligent, responsible,
                         and collaborative, I actively build personal projects and have completed several application
                         projects as part of that initiative to enhance my skills and professional growth.</p>
-                    <div class="personal-info">
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <div class="info-item">
-                                    <span class="label">Name</span>
-                                    <span class="value">Ganes Yudha Kusuma</span>
+                    <div class="personal-info glass p-4 mt-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="info-item d-flex align-items-start">
+                                    <div class="info-icon me-3">
+                                        <i class="bi bi-person text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <span class="label">Name</span>
+                                        <span class="value d-block">Ganes Yudha Kusuma</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="info-item">
-                                    <span class="label">Phone</span>
-                                    <span class="value">0857 8107 9860</span>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex align-items-start">
+                                    <div class="info-icon me-3">
+                                        <i class="bi bi-linkedin text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <span class="label">LinkedIn</span>
+                                        <span class="value d-block"><a
+                                                href="https://www.linkedin.com/in/ganesyudhakusuma" target="_blank"
+                                                class="text-accent">LinkedIn Profile</a></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="info-item">
-                                    <span class="label">Birthday</span>
-                                    <span class="value">October 12, 2002</span>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex align-items-start">
+                                    <div class="info-icon me-3">
+                                        <i class="bi bi-calendar-event text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <span class="label">Birthday</span>
+                                        <span class="value d-block">October 12, 2002</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="info-item">
-                                    <span class="label">Email</span>
-                                    <span class="value">ganesyudhakusuma @gmail.com</span>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex align-items-start">
+                                    <div class="info-icon me-3">
+                                        <i class="bi bi-envelope text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <span class="label">Email</span>
+                                        <span class="value d-block">ganesyudhakusuma@gmail.com</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <h4 class="lead-4 mt-2 text-center"><b>Skills</b></h4>
+                    <div class="row align-items-center mt-5">
+                        <div class="col-12">
+                            <h4 class="text-accent text-center mb-4"
+                                style="font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Professional
+                                Skills</h4>
+                        </div>
                     </div>
-                    <div class="row justify-content-center">
-                        <% if (skills && skills.length> 0) { %>
-                            <% skills.forEach(function(skill) { %>
-                                <div class="col-6 col-sm-4 col-md-3 col-lg-3 text-center my-2">
-                                    <h5>
-                                        <span class="badge" style="background-color: #ff9100; color: white; padding: 6px 8px; border-radius: 4px; display: block; width: 100%;">
-                                            <%= skill.SkillName %>
-                                        </span>
-                                    </h5>
+                    <div class="row g-3 justify-content-center">
+                        <% if (skills && skills.length> 0) {
+                            const iconMap = {
+                            '.net': 'bi-microsoft',
+                            'c#': 'bi-hash',
+                            'codeigniter': 'bi-fire',
+                            'laravel': 'bi-box-seam',
+                            'express js': 'bi-hdd-network',
+                            'node js': 'bi-node-plus',
+                            'javascript': 'bi-filetype-js',
+                            'html': 'bi-filetype-html',
+                            'css': 'bi-filetype-css',
+                            'bootstrap': 'bi-bootstrap',
+                            'git': 'bi-git',
+                            'sql server': 'bi-database-fill-gear',
+                            'mysql': 'bi-database-fill',
+                            'php': 'bi-filetype-php'
+                            };
+
+                            skills.forEach(function(skill) {
+                            const skillNameLower = (skill.SkillName || "").toLowerCase();
+                            let iconClass = 'bi-check2-circle';
+
+                            if (skillNameLower.includes('database')) {
+                            iconClass = 'bi-database-fill';
+                            } else if (skillNameLower.includes('git')) {
+                            iconClass = 'bi-github';
+                            } else if (iconMap[skillNameLower]) {
+                            iconClass = iconMap[skillNameLower];
+                            }
+                            %>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+                                <div class="skill-badge-pro">
+                                    <i class="bi <%= iconClass %>"></i>
+                                    <span class="skill-name">
+                                        <%= skill.SkillName %>
+                                    </span>
                                 </div>
-                            <% }); %>
-                        <% } else { %>
-                            <div class="col-12 text-center">
-                                <p>No skills available.</p>
                             </div>
-                        <% } %>
+                            <% }); } else { %>
+                                <div class="col-12 text-center">
+                                    <p class="text-muted">No skills available.</p>
+                                </div>
+                                <% } %>
                     </div>
                 </div>
             </div>

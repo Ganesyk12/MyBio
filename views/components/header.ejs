@@ -9,19 +9,25 @@
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="/"
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'index') ? 'active' : '' %>">Home</a></li>
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'index') ? 'active' : '' %>">Home</a>
+                </li>
                 <li><a href="/about" data-ajax-nav
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'about') ? 'active' : '' %>">About</a></li>
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'about') ? 'active' : '' %>">About</a>
+                </li>
                 <li><a href="/resume" data-ajax-nav
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'resume') ? 'active' : '' %>">Resume</a></li>
-                <li><a href="/project"
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'project') ? 'active' : '' %>">Portfolio</a></li>
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'resume') ? 'active' : '' %>">Resume</a>
+                </li>
+                <li><a href="/portfolio"
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'portfolio') ? 'active' : '' %>">Portfolio</a>
+                </li>
                 <li><a href="/services" data-ajax-nav
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'services') ? 'active' : '' %>">Services</a></li>
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'services') ? 'active' : '' %>">Services</a>
+                </li>
                 <li><a href="/contact"
-                        class="<%= (typeof activePage !== 'undefined' && activePage === 'contact') ? 'active' : '' %>">Contact</a></li>
+                        class="<%= (typeof activePage !== 'undefined' && activePage === 'contact') ? 'active' : '' %>">Contact</a>
+                </li>
             </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </div>
 </header>
