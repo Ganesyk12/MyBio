@@ -1,0 +1,88 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Message Management</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#!">Content Management</a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/messages">Messages</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>All Messages</h5>
+            </div>
+            <div class="card-body table-border-style">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof messages !=='undefined' && messages.length> 0) { %>
+                                <% messages.forEach((msg, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= msg.Name %>
+                                        </td>
+                                        <td><a href="mailto:<%= msg.Email %>">
+                                                <%= msg.Email %>
+                                            </a></td>
+                                        <td>
+                                            <%= msg.Subject %>
+                                        </td>
+                                        <td>
+                                            <span title="<%= msg.Message || 'No Message' %>">
+                                                <%= (msg.Message && msg.Message.length > 40) ? msg.Message.substring(0, 40) + '...' : (msg.Message || '-') %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <%= new Date(msg.DateCreate).toLocaleDateString('id-ID', { day: 'numeric' ,
+                                                month: 'short' , year: 'numeric' , hour: '2-digit' , minute: '2-digit'
+                                                }) %>
+                                        </td>
+                                        <td>
+                                            <a href="/centralize/messages/view/<%= msg.IdMail %>"
+                                                class="btn btn-primary btn-sm">
+                                                <i class="feather icon-eye"></i>
+                                            </a>
+                                            <form action="/centralize/messages/delete/<%= msg.IdMail %>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="feather icon-trash-2"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="7" class="text-center">No messages found.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

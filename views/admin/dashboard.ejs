@@ -1,0 +1,287 @@
+<!-- [ breadcrumb ] start -->
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Dashboard</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#!">Dashboard</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ breadcrumb ] end -->
+
+<!-- [ Main Content ] start -->
+<div class="row">
+    <!-- Summary Cards Row -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-blue order-card">
+            <div class="card-body">
+                <h6 class="text-white">Total Projects</h6>
+                <h2 class="text-right text-white">
+                    <i class="feather icon-briefcase float-left"></i>
+                    <span><%= typeof totalProjects !== 'undefined' ? totalProjects : 0 %></span>
+                </h2>
+                <p class="m-b-0 text-white">Completed Projects</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-green order-card">
+            <div class="card-body">
+                <h6 class="text-white">Total Skills</h6>
+                <h2 class="text-right text-white">
+                    <i class="feather icon-sliders float-left"></i>
+                    <span><%= typeof totalSkills !== 'undefined' ? totalSkills : 0 %></span>
+                </h2>
+                <p class="m-b-0 text-white">Active Skills</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-yellow order-card">
+            <div class="card-body">
+                <h6 class="text-white">Messages</h6>
+                <h2 class="text-right text-white">
+                    <i class="feather icon-mail float-left"></i>
+                    <span><%= typeof totalMessages !== 'undefined' ? totalMessages : 0 %></span>
+                </h2>
+                <p class="m-b-0 text-white">Contact Submissions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-red order-card">
+            <div class="card-body">
+                <h6 class="text-white">Project Types</h6>
+                <h2 class="text-right text-white">
+                    <i class="feather icon-layers float-left"></i>
+                    <span><%= typeof totalProjectTypes !== 'undefined' ? totalProjectTypes : 0 %></span>
+                </h2>
+                <p class="m-b-0 text-white">Categories</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Projects Table -->
+    <div class="col-xl-8 col-md-12">
+        <div class="card table-card">
+            <div class="card-header">
+                <h5>Recent Projects</h5>
+                <div class="card-header-right">
+                    <div class="btn-group card-option">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="feather icon-more-horizontal"></i>
+                        </button>
+                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
+                            <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                            <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Project Name</th>
+                                <th>Type</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof recentProjects !== 'undefined' && recentProjects.length > 0) { %>
+                                <% recentProjects.forEach((project, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= project.ProjectName %></td>
+                                    <td><label class="badge badge-light-primary"><%= project.ProjectType.TypeName %></label></td>
+                                    <td><%= new Date(project.DateCreated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No projects found</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills List -->
+    <div class="col-xl-4 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Active Skills</h5>
+            </div>
+            <div class="card-body">
+                <% if (typeof skills !== 'undefined' && skills.length > 0) { %>
+                    <% skills.forEach(skill => { %>
+                    <div class="row align-items-center m-b-20">
+                        <div class="col-auto">
+                            <i class="feather icon-check-circle f-28 text-c-green"></i>
+                        </div>
+                        <div class="col">
+                            <h6 class="m-b-5"><%= skill.SkillName %></h6>
+                            <p class="text-muted m-b-0 text-sm"><%= new Date(skill.DateCreated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
+                        </div>
+                        <div class="col-auto">
+                            <label class="badge badge-light-success">Active</label>
+                        </div>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-muted text-center">No skills found</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Messages -->
+    <div class="col-xl-12 col-md-12">
+        <div class="card table-card">
+            <div class="card-header">
+                <h5>Recent Messages</h5>
+                <div class="card-header-right">
+                    <div class="btn-group card-option">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="feather icon-more-horizontal"></i>
+                        </button>
+                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
+                            <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                            <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof recentMessages !== 'undefined' && recentMessages.length > 0) { %>
+                                <% recentMessages.forEach((msg, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= msg.Name %></td>
+                                    <td><a href="mailto:<%= msg.Email %>"><%= msg.Email %></a></td>
+                                    <td><%= msg.Subject %></td>
+                                    <td><%= msg.Message.length > 50 ? msg.Message.substring(0, 50) + '...' : msg.Message %></td>
+                                    <td><%= new Date(msg.DateCreate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                                    <td>
+                                        <% if (msg.Status === 'A') { %>
+                                            <label class="badge badge-light-success">Active</label>
+                                        <% } else { %>
+                                            <label class="badge badge-light-warning"><%= msg.Status || 'N/A' %></label>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No messages found</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Types Summary -->
+    <div class="col-xl-6 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Project Types</h5>
+            </div>
+            <div class="card-body">
+                <% if (typeof projectTypes !== 'undefined' && projectTypes.length > 0) { %>
+                    <% projectTypes.forEach(type => { %>
+                    <div class="row align-items-center m-b-20">
+                        <div class="col-auto">
+                            <i class="feather icon-folder f-28 text-c-blue"></i>
+                        </div>
+                        <div class="col">
+                            <h6 class="m-b-5"><%= type.TypeName %></h6>
+                            <p class="text-muted m-b-0"><%= type._count.Project %> project(s)</p>
+                        </div>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-muted text-center">No project types found</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="col-xl-6 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center m-b-20">
+                    <div class="col-auto">
+                        <i class="feather icon-image f-28 text-c-yellow"></i>
+                    </div>
+                    <div class="col">
+                        <h6 class="m-b-5">Project Details</h6>
+                        <p class="text-muted m-b-0"><%= typeof totalProjectDetails !== 'undefined' ? totalProjectDetails : 0 %> total entries</p>
+                    </div>
+                </div>
+                <div class="row align-items-center m-b-20">
+                    <div class="col-auto">
+                        <i class="feather icon-briefcase f-28 text-c-blue"></i>
+                    </div>
+                    <div class="col">
+                        <h6 class="m-b-5">Projects</h6>
+                        <p class="text-muted m-b-0"><%= typeof totalProjects !== 'undefined' ? totalProjects : 0 %> total</p>
+                    </div>
+                </div>
+                <div class="row align-items-center m-b-20">
+                    <div class="col-auto">
+                        <i class="feather icon-sliders f-28 text-c-green"></i>
+                    </div>
+                    <div class="col">
+                        <h6 class="m-b-5">Skills</h6>
+                        <p class="text-muted m-b-0"><%= typeof totalSkills !== 'undefined' ? totalSkills : 0 %> active</p>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <i class="feather icon-mail f-28 text-c-red"></i>
+                    </div>
+                    <div class="col">
+                        <h6 class="m-b-5">Messages</h6>
+                        <p class="text-muted m-b-0"><%= typeof totalMessages !== 'undefined' ? totalMessages : 0 %> received</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->

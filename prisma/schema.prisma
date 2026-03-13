@@ -23,6 +23,7 @@ model Project {
   IdType Int
   ProjectName String
   DateCreated DateTime @default(now())
+  Status String?
   ProjectDetail ProjectDetail[]
 
   ProjectType ProjectType @relation(fields: [IdType], references: [IdType])
@@ -54,4 +55,5 @@ model Skill {
   DateCreated DateTime @default(now())
   Status String?
   ProjectDetail ProjectDetail[]
+  Icon String?
 }

@@ -1,0 +1,89 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Project Management</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#!">Content Management</a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/projects">Projects</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>All Projects</h5>
+                <div class="card-header-right">
+                    <a href="/centralize/projects/create" class="btn btn-primary btn-sm">
+                        <i class="feather icon-plus"></i> Add New Project
+                    </a>
+                </div>
+            </div>
+            <div class="card-body table-border-style">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Project Name</th>
+                                <th>Type</th>
+                                <th>Details</th>
+                                <th>Date Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof projects !== 'undefined' && projects.length > 0) { %>
+                                <% projects.forEach((project, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= project.ProjectName %></td>
+                                    <td><label class="badge badge-light-primary"><%= project.ProjectType ? project.ProjectType.TypeName : 'N/A' %></label></td>
+                                    <td>
+                                        <ul class="list-unstyled mb-0">
+                                            <% if (project.ProjectDetail && project.ProjectDetail.length > 0) { %>
+                                                <% project.ProjectDetail.forEach(detail => { %>
+                                                    <li class="text-muted small">
+                                                        <i class="feather icon-check m-r-5 text-success"></i>
+                                                        <%= (detail.Description && detail.Description.length > 30) ? detail.Description.substring(0, 30) + '...' : (detail.Description || '-') %>
+                                                    </li>
+                                                <% }) %>
+                                            <% } else { %>
+                                                <li class="text-muted small">No details</li>
+                                            <% } %>
+                                        </ul>
+                                    </td>
+                                    <td><%= new Date(project.DateCreated).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                                    <td>
+                                        <a href="/centralize/projects/edit/<%= project.IdProject %>" class="btn btn-info btn-sm">
+                                            <i class="feather icon-edit"></i>
+                                        </a>
+                                        <form action="/centralize/projects/delete/<%= project.IdProject %>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">No projects found.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import pageRoutes from './routes/pageRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import cors from 'cors';
 import path from "path";
 import { fileURLToPath } from "url";
@@ -34,6 +35,7 @@ app.use(express.static('public'));
 
 // Route Definition
 app.use('/', pageRoutes);
+app.use('/centralize', adminRoutes);
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Express running Apps on http://localhost:${PORT}`);

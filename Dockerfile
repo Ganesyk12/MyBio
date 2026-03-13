@@ -4,14 +4,17 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     openssl \
     && rm -rf /var/lib/apt/lists/*
-COPY package*.json ./
+# Install pnpm
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma/
 # Set proper Prisma binary target
 ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
 # Install dependencies & generate Prisma client
-RUN npm ci && \
-    npx prisma generate
+RUN pnpm install --frozen-lockfile && \
+    pnpm prisma generate
 COPY . .
 EXPOSE 5000
 # Default start command
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

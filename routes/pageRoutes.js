@@ -1,17 +1,22 @@
 import express from 'express';
-import { BaseController, DataProcessing } from '../controllers/baseController.js';
+import { PageController } from '../controllers/pageController.js';
+import { ProjectController } from '../controllers/projectController.js';
+import { EmailController } from '../controllers/emailController.js';
 
 const router = express.Router();
-// Page Route
-router.get('/', BaseController.getHome);
-router.get('/about', BaseController.getAboutPage);
-router.get('/contact', BaseController.getContactPage);
-router.get('/resume', BaseController.getResumePage);
-router.get('/portfolio', BaseController.getProjectPage);
-router.get('/services', BaseController.getServicePage);
-router.get('/portfolio/:id', DataProcessing.getProjectDetail);
+
+// Page Routes
+router.get('/', PageController.getHome);
+router.get('/about', PageController.getAboutPage);
+router.get('/contact', PageController.getContactPage);
+router.get('/resume', PageController.getResumePage);
+router.get('/services', PageController.getServicePage);
+
+// Project Routes
+router.get('/portfolio', ProjectController.getProjectPage);
+router.get('/portfolio/:id', ProjectController.getProjectDetail);
 
 // Data Processing
-router.post('/submitEmail', DataProcessing.submitEmail);
+router.post('/submitEmail', EmailController.submitEmail);
 
 export default router;

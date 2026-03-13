@@ -1,0 +1,90 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Project Management</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/projects">Projects</a></li>
+                    <li class="breadcrumb-item"><a href="#!">Edit Project</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Project</h5>
+            </div>
+            <div class="card-body">
+                <form action="/centralize/projects/edit/<%= project.IdProject %>" method="POST">
+                    <div class="form-group row">
+                        <label for="ProjectName" class="col-sm-2 col-form-label">Project Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="ProjectName" name="ProjectName" value="<%= project.ProjectName %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="IdType" class="col-sm-2 col-form-label">Project Type</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="IdType" name="IdType" required>
+                                <% types.forEach(type => { %>
+                                    <option value="<%= type.IdType %>" <%= project.IdType === type.IdType ? 'selected' : '' %>>
+                                        <%= type.TypeName %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <% if(project.ProjectDetail && project.ProjectDetail.length > 0) { %>
+                    <hr>
+                    <h6 class="mb-3">First Project Detail Entry</h6>
+                    <div class="form-group row">
+                        <label for="Description" class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="Description" name="Description" rows="3"><%= project.ProjectDetail[0].Description %></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="FilePath" class="col-sm-2 col-form-label">FilePath</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="FilePath" name="FilePath" value="<%= project.ProjectDetail[0].FilePath %>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Link" class="col-sm-2 col-form-label">Link</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Link" name="Link" value="<%= project.ProjectDetail[0].Link || '' %>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="IdSkill" class="col-sm-2 col-form-label">Related Skill (Optional)</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="IdSkill" name="IdSkill">
+                                <option value="">None / Select a skill</option>
+                                <% skills.forEach(skill => { %>
+                                    <option value="<%= skill.IdSkill %>" <%= project.ProjectDetail[0].IdSkill === skill.IdSkill ? 'selected' : '' %>>
+                                        <%= skill.SkillName %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Update Project</button>
+                            <a href="/centralize/projects" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
