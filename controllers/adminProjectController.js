@@ -36,10 +36,32 @@ export class AdminProjectController {
 
     static async postCreate(req, res) {
         try {
-            await ProjectModel.adminCreateProject(req.body);
+            const data = { ...req.body };
+            if (req.file) {
+                // If a file was uploaded, assign its relative path
+                data.FilePath = `/img/portfolio/${req.file.filename}`;
+            }
+
+            await ProjectModel.adminCreateProject(data);
             res.redirect('/centralize/projects');
         } catch (error) {
             console.error('Error creating project:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    }
+
+    static async getDetail(req, res) {
+        try {
+            const project = await ProjectModel.adminGetProjectById(req.params.id);
+            if (!project) return res.status(404).send('Project not found');
+            
+            res.render('admin/projects/detail', { 
+                layout: 'admin/layouts/admin', 
+                title: 'Project Detail',
+                project 
+            });
+        } catch (error) {
+            console.error('Error getting project detail:', error);
             res.status(500).send('Internal Server Error');
         }
     }
@@ -67,7 +89,13 @@ export class AdminProjectController {
 
     static async postEdit(req, res) {
         try {
-            await ProjectModel.adminUpdateProject(req.params.id, req.body);
+            const data = { ...req.body };
+            if (req.file) {
+                // If a new file was uploaded, update the FilePath
+                data.FilePath = `/img/portfolio/${req.file.filename}`;
+            }
+
+            await ProjectModel.adminUpdateProject(req.params.id, data);
             res.redirect('/centralize/projects');
         } catch (error) {
             console.error('Error updating project:', error);

@@ -57,3 +57,14 @@ model Skill {
   ProjectDetail ProjectDetail[]
   Icon String?
 }
+
+model UserLogin {
+  IdUserLogin Int @id @default(autoincrement())
+  UserName String @unique
+  Password String
+  CreatedBy String? @default("SYSTEM")
+  ModifiedBy String? @default("SYSTEM")
+  DateCreated DateTime @default(now())
+  DateModified DateTime?
+  Status String? @default("A")
+}

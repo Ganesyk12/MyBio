@@ -43,7 +43,7 @@ export class SkillModel {
             const skill = await withTimeout(prisma.skill.create({
                 data: {
                     SkillName: data.SkillName,
-                    Status: data.Status,
+                    Status: data.Status || 'A',
                     Icon: data.Icon || null
                 }
             }));

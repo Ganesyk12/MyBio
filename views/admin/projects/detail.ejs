@@ -1,0 +1,132 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Project Management</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/projects">Projects</a></li>
+                    <li class="breadcrumb-item"><a href="#!">Project Detail</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Project Details - Read Only</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th class="pl-0" style="width: 30%;">ID Project</th>
+                                    <td>: <%= project.IdProject %></td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-0">Project Name</th>
+                                    <td>: <%= project.ProjectName %></td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-0">Project Type</th>
+                                    <td>
+                                        : <label class="badge badge-light-primary"><%= project.ProjectType ? project.ProjectType.TypeName : 'N/A' %></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-0">Status</th>
+                                    <td>
+                                        : 
+                                        <% if (project.Status === 'N') { %>
+                                            <label class="badge badge-light-danger">Inactive (Soft Deleted)</label>
+                                        <% } else { %>
+                                            <label class="badge badge-light-success">Active</label>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-0">Date Created</th>
+                                    <td>: <%= new Date(project.DateCreated).toLocaleString('id-ID') %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5 class="mt-4 mb-3">Project Details (Sub Entries)</h5>
+
+                <% if(project.ProjectDetail && project.ProjectDetail.length > 0) { %>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Description</th>
+                                    <th>File Path</th>
+                                    <th>Link</th>
+                                    <th>Related Skill</th>
+                                    <th>Date Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% project.ProjectDetail.forEach((detail, idx) => { %>
+                                    <tr>
+                                        <td><%= idx + 1 %></td>
+                                        <td><%= detail.Description || '-' %></td>
+                                        <td>
+                                            <% if(detail.FilePath) { %>
+                                                <a href="<%= detail.FilePath %>" target="_blank" class="text-primary"><%= detail.FilePath %></a>
+                                            <% } else { %>
+                                                -
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if(detail.Link) { %>
+                                                <a href="<%= detail.Link %>" target="_blank" class="text-info"><%= detail.Link %></a>
+                                            <% } else { %>
+                                                -
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if(detail.Skill) { %>
+                                                <label class="badge badge-light-info"><%= detail.Skill.SkillName %></label>
+                                            <% } else { %>
+                                                -
+                                            <% } %>
+                                        </td>
+                                        <td><%= new Date(detail.DateCreated).toLocaleString('id-ID') %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-warning" role="alert">
+                        This project currently has no details appended.
+                    </div>
+                <% } %>
+
+                <div class="row mt-4">
+                    <div class="col-sm-10">
+                        <a href="/centralize/projects" class="btn btn-secondary">
+                            <i class="feather icon-arrow-left"></i> Back to Projects
+                        </a>
+                        <a href="/centralize/projects/edit/<%= project.IdProject %>" class="btn btn-info">
+                            <i class="feather icon-edit"></i> Edit Project
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

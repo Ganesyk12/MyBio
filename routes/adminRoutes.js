@@ -3,6 +3,7 @@ import { AdminController } from '../controllers/adminController.js';
 import { AdminProjectController } from '../controllers/adminProjectController.js';
 import { AdminSkillController } from '../controllers/adminSkillController.js';
 import { AdminMessageController } from '../controllers/adminMessageController.js';
+import { upload } from '../utils/upload.js';
 
 const router = express.Router();
 
@@ -12,9 +13,10 @@ router.get('/', AdminController.getDashboard);
 // Admin Projects
 router.get('/projects', AdminProjectController.getIndex);
 router.get('/projects/create', AdminProjectController.getCreate);
-router.post('/projects/create', AdminProjectController.postCreate);
+router.post('/projects/create', upload.single('FileImage'), AdminProjectController.postCreate);
+router.get('/projects/detail/:id', AdminProjectController.getDetail);
 router.get('/projects/edit/:id', AdminProjectController.getEdit);
-router.post('/projects/edit/:id', AdminProjectController.postEdit);
+router.post('/projects/edit/:id', upload.single('FileImage'), AdminProjectController.postEdit);
 router.post('/projects/delete/:id', AdminProjectController.delete);
 
 // Admin Skills

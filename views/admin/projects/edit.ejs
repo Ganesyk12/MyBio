@@ -22,7 +22,7 @@
                 <h5>Edit Project</h5>
             </div>
             <div class="card-body">
-                <form action="/centralize/projects/edit/<%= project.IdProject %>" method="POST">
+                <form action="/centralize/projects/edit/<%= project.IdProject %>" method="POST" enctype="multipart/form-data">
                     <div class="form-group row">
                         <label for="ProjectName" class="col-sm-2 col-form-label">Project Name</label>
                         <div class="col-sm-10">
@@ -41,25 +41,44 @@
                             </select>
                         </div>
                     </div>
-                    <% if(project.ProjectDetail && project.ProjectDetail.length > 0) { %>
+                    <div class="form-group row">
+                        <label for="Status" class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="Status" name="Status" required>
+                                <option value="A" <%= project.Status === 'A' ? 'selected' : '' %>>Active</option>
+                                <option value="N" <%= project.Status === 'N' ? 'selected' : '' %>>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
                     <hr>
-                    <h6 class="mb-3">First Project Detail Entry</h6>
+                    <h6 class="mb-3">Project Detail</h6>
+                    <% const detail = project.ProjectDetail && project.ProjectDetail.length > 0 ? project.ProjectDetail[0] : null; %>
                     <div class="form-group row">
                         <label for="Description" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="Description" name="Description" rows="3"><%= project.ProjectDetail[0].Description %></textarea>
+                            <textarea class="form-control" id="Description" name="Description" rows="3"><%= detail ? detail.Description : '' %></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="FilePath" class="col-sm-2 col-form-label">FilePath</label>
+                        <label for="FileImage" class="col-sm-2 col-form-label">
+                            <%= detail && detail.FilePath ? 'Update Image' : 'Upload Image' %>
+                        </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="FilePath" name="FilePath" value="<%= project.ProjectDetail[0].FilePath %>">
+                            <% if (detail && detail.FilePath) { %>
+                                <div class="mb-2">
+                                    <img src="<%= detail.FilePath %>" alt="Current Image" class="img-thumbnail" style="max-height: 100px;">
+                                </div>
+                            <% } %>
+                            <input type="file" class="form-control-file" id="FileImage" name="FileImage" accept="image/*">
+                            <small class="text-muted">
+                                <%= detail && detail.FilePath ? 'Leave empty to keep current image. Upload to overwrite.' : 'Upload project image.' %>
+                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="Link" class="col-sm-2 col-form-label">Link</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="Link" name="Link" value="<%= project.ProjectDetail[0].Link || '' %>">
+                            <input type="text" class="form-control" id="Link" name="Link" value="<%= detail ? (detail.Link || '') : '' %>">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -68,14 +87,13 @@
                             <select class="form-control" id="IdSkill" name="IdSkill">
                                 <option value="">None / Select a skill</option>
                                 <% skills.forEach(skill => { %>
-                                    <option value="<%= skill.IdSkill %>" <%= project.ProjectDetail[0].IdSkill === skill.IdSkill ? 'selected' : '' %>>
+                                    <option value="<%= skill.IdSkill %>" <%= detail && detail.IdSkill === skill.IdSkill ? 'selected' : '' %>>
                                         <%= skill.SkillName %>
                                     </option>
                                 <% }) %>
                             </select>
                         </div>
                     </div>
-                    <% } %>
 
                     <div class="form-group row mt-4">
                         <div class="col-sm-10">

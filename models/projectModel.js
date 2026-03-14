@@ -156,6 +156,7 @@ export class ProjectModel {
                 data: {
                     ProjectName: data.ProjectName,
                     IdType: Number(data.IdType),
+                    Status: 'A',
                     ProjectDetail: {
                         create: {
                             Description: data.Description || "",
@@ -179,16 +180,19 @@ export class ProjectModel {
                 where: { IdProject: Number(id) },
                 data: {
                     ProjectName: data.ProjectName,
-                    IdType: Number(data.IdType)
+                    IdType: Number(data.IdType),
+                    Status: data.Status || 'A'
                 }
             }));
 
-            // Optional: Update first detail if available
+            // Handle ProjectDetail: update if exists, create if not
             if (data.Description || data.FilePath || data.Link || data.IdSkill) {
                const firstDetail = await prisma.projectDetail.findFirst({
                    where: { IdProject: Number(id) }
                });
+               
                if(firstDetail){
+                   // Update existing detail
                    await prisma.projectDetail.update({
                        where: { IdProjectDetail: firstDetail.IdProjectDetail },
                        data: {
@@ -196,6 +200,17 @@ export class ProjectModel {
                            FilePath: data.FilePath || firstDetail.FilePath,
                            Link: data.Link || firstDetail.Link,
                            IdSkill: data.IdSkill ? Number(data.IdSkill) : firstDetail.IdSkill
+                       }
+                   });
+               } else {
+                   // Create new detail if none exists
+                   await prisma.projectDetail.create({
+                       data: {
+                           IdProject: Number(id),
+                           Description: data.Description || "",
+                           FilePath: data.FilePath || "",
+                           Link: data.Link || null,
+                           IdSkill: data.IdSkill ? Number(data.IdSkill) : 1
                        }
                    });
                }
