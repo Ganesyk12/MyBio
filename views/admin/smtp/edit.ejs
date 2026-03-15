@@ -1,0 +1,98 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Edit SMTP Configuration</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/smtp">SMTP</a></li>
+                    <li class="breadcrumb-item"><a href="#!">Edit</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit SMTP Settings</h5>
+            </div>
+            <div class="card-body">
+                <form action="/centralize/smtp/edit/<%= smtp.IdSmtp %>" method="POST">
+                    
+                    <h6 class="mb-3">Server Configuration</h6>
+                    <div class="form-group row">
+                        <label for="Host" class="col-sm-2 col-form-label">Host <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Host" name="Host" value="<%= smtp.Host %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Port" class="col-sm-2 col-form-label">Port <span class="text-danger">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="Port" name="Port" value="<%= smtp.Port %>" required>
+                        </div>
+                        <label for="EnableSSL" class="col-sm-2 col-form-label">Enable SSL</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="EnableSSL" name="EnableSSL">
+                                <option value="1" <%= smtp.EnableSSL ? 'selected' : '' %>>Yes</option>
+                                <option value="0" <%= !smtp.EnableSSL ? 'selected' : '' %>>No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Sender Information</h6>
+                    <div class="form-group row">
+                        <label for="SenderName" class="col-sm-2 col-form-label">Sender Name <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="SenderName" name="SenderName" value="<%= smtp.SenderName %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="SenderEmail" class="col-sm-2 col-form-label">Sender Email <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="SenderEmail" name="SenderEmail" value="<%= smtp.SenderEmail %>" required>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Authentication</h6>
+                    <div class="form-group row">
+                        <label for="Username" class="col-sm-2 col-form-label">Username <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Username" name="Username" value="<%= smtp.Username %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-2 col-form-label">Password <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="Password" name="Password" value="<%= smtp.Password %>" required>
+                            <small class="text-muted">Fill in your password to update it.</small>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Status</h6>
+                    <div class="form-group row">
+                        <label for="IsActive" class="col-sm-2 col-form-label">Set as Active</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="IsActive" name="IsActive">
+                                <option value="1" <%= smtp.IsActive ? 'selected' : '' %>>Yes</option>
+                                <option value="0" <%= !smtp.IsActive ? 'selected' : '' %>>No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-10 offset-sm-2">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="/centralize/smtp" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

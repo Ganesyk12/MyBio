@@ -1,0 +1,85 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">SMTP Configuration</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="#!">Setup</a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/smtp">SMTP</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>All SMTP Configurations</h5>
+                <div class="card-header-right">
+                    <a href="/centralize/smtp/create" class="btn btn-primary btn-sm">
+                        <i class="feather icon-plus"></i> Add New SMTP
+                    </a>
+                </div>
+            </div>
+            <div class="card-body table-border-style">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Host</th>
+                                <th>Port</th>
+                                <th>Sender Name</th>
+                                <th>Sender Email</th>
+                                <th>Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof smtps !== 'undefined' && smtps.length > 0) { %>
+                                <% smtps.forEach((smtp, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= smtp.Host %></td>
+                                    <td><%= smtp.Port %></td>
+                                    <td><%= smtp.SenderName %></td>
+                                    <td><%= smtp.SenderEmail %></td>
+                                    <td>
+                                        <% if (smtp.IsActive) { %>
+                                            <span class="badge badge-light-success">Yes</span>
+                                        <% } else { %>
+                                            <span class="badge badge-light-danger">No</span>
+                                        <% } %>
+                                        <% if (smtp.Status === 'N') { %>
+                                            <span class="badge badge-light-danger">Deleted</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <a href="/centralize/smtp/edit/<%= smtp.IdSmtp %>" class="btn btn-info btn-sm" title="Edit">
+                                            <i class="feather icon-edit"></i>
+                                        </a>
+                                        <form action="/centralize/smtp/delete/<%= smtp.IdSmtp %>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this SMTP configuration?');">
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">No SMTP configurations found.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

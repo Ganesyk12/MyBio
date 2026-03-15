@@ -1,0 +1,98 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Add SMTP Configuration</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/centralize"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/centralize/smtp">SMTP</a></li>
+                    <li class="breadcrumb-item"><a href="#!">Create</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add New SMTP Settings</h5>
+            </div>
+            <div class="card-body">
+                <form action="/centralize/smtp/create" method="POST">
+                    
+                    <h6 class="mb-3">Server Configuration</h6>
+                    <div class="form-group row">
+                        <label for="Host" class="col-sm-2 col-form-label">Host <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Host" name="Host" placeholder="e.g smtp.gmail.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Port" class="col-sm-2 col-form-label">Port <span class="text-danger">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="Port" name="Port" placeholder="e.g 465 or 587" required>
+                        </div>
+                        <label for="EnableSSL" class="col-sm-2 col-form-label">Enable SSL</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="EnableSSL" name="EnableSSL">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Sender Information</h6>
+                    <div class="form-group row">
+                        <label for="SenderName" class="col-sm-2 col-form-label">Sender Name <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="SenderName" name="SenderName" placeholder="e.g System Admin" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="SenderEmail" class="col-sm-2 col-form-label">Sender Email <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="SenderEmail" name="SenderEmail" placeholder="e.g admin@yourdomain.com" required>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Authentication</h6>
+                    <div class="form-group row">
+                        <label for="Username" class="col-sm-2 col-form-label">Username <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="Username" name="Username" placeholder="SMTP Username" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-2 col-form-label">Password <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="Password" name="Password" placeholder="SMTP Password" required>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-4">Status</h6>
+                    <div class="form-group row">
+                        <label for="IsActive" class="col-sm-2 col-form-label">Set as Active</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="IsActive" name="IsActive">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                            <small class="text-muted">Set to 'Yes' to make this the active SMTP configuration.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-10 offset-sm-2">
+                            <button type="submit" class="btn btn-primary">Save Configuration</button>
+                            <a href="/centralize/smtp" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

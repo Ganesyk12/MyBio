@@ -3,6 +3,7 @@ import { AdminController } from '../controllers/adminController.js';
 import { AdminProjectController } from '../controllers/adminProjectController.js';
 import { AdminSkillController } from '../controllers/adminSkillController.js';
 import { AdminMessageController } from '../controllers/adminMessageController.js';
+import { AdminSmtpController } from '../controllers/adminSmtpController.js';
 import { upload } from '../utils/upload.js';
 
 const router = express.Router();
@@ -30,5 +31,13 @@ router.post('/skills/delete/:id', AdminSkillController.delete);
 // Admin Messages
 router.get('/messages', AdminMessageController.getIndex);
 router.post('/messages/delete/:id', AdminMessageController.delete);
+
+// Admin SMTP Settings
+router.get('/smtp', AdminSmtpController.getIndex);
+router.get('/smtp/create', AdminSmtpController.getCreate);
+router.post('/smtp/create', AdminSmtpController.postCreate);
+router.get('/smtp/edit/:id', AdminSmtpController.getEdit);
+router.post('/smtp/edit/:id', AdminSmtpController.postEdit);
+router.post('/smtp/delete/:id', AdminSmtpController.delete);
 
 export default router;

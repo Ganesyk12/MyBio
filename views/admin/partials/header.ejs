@@ -24,11 +24,11 @@
         <ul class="navbar-nav ml-auto">
             <li>
                 <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                    <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
                         <i class="icon feather icon-bell"></i>
                         <span class="badge badge-pill badge-danger">3</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right notification">
+                    <div class="dropdown-menu dropdown-menu-end notification">
                         <div class="noti-head">
                             <h6 class="d-inline-block m-b-0">Notifications</h6>
                             <div class="float-right">
@@ -42,18 +42,22 @@
                             </li>
                             <li class="notification">
                                 <div class="media">
-                                    <img class="img-radius" src="/flat-able/dist/assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
+                                    <img class="img-radius" src="/flat-able/dist/assets/images/user/avatar-1.jpg"
+                                        alt="Generic placeholder image">
                                     <div class="media-body">
-                                        <p><strong>New Message</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>5 min</span></p>
+                                        <p><strong>New Message</strong><span class="n-time text-muted"><i
+                                                    class="icon feather icon-clock m-r-10"></i>5 min</span></p>
                                         <p>You have a new contact form submission</p>
                                     </div>
                                 </div>
                             </li>
                             <li class="notification">
                                 <div class="media">
-                                    <img class="img-radius" src="/flat-able/dist/assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+                                    <img class="img-radius" src="/flat-able/dist/assets/images/user/avatar-2.jpg"
+                                        alt="Generic placeholder image">
                                     <div class="media-body">
-                                        <p><strong>Portfolio View</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
+                                        <p><strong>Portfolio View</strong><span class="n-time text-muted"><i
+                                                    class="icon feather icon-clock m-r-10"></i>30 min</span></p>
                                         <p>Someone viewed your portfolio</p>
                                     </div>
                                 </div>
@@ -67,21 +71,17 @@
             </li>
             <li>
                 <div class="dropdown drp-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="feather icon-user"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right profile-notification">
+                    <div class="dropdown-menu dropdown-menu-end profile-notification">
                         <div class="pro-head">
-                            <img src="/flat-able/dist/assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
+                            <i class="feather icon-user"></i>
                             <span>Admin</span>
-                            <a href="/" class="dud-logout" title="Back to Site">
-                                <i class="feather icon-log-out"></i>
-                            </a>
                         </div>
                         <ul class="pro-body">
-                            <li><a href="#!" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
-                            <li><a href="#!" class="dropdown-item"><i class="feather icon-settings"></i> Settings</a></li>
-                            <li><a href="/" class="dropdown-item"><i class="feather icon-globe"></i> View Website</a></li>
+                            <li><a href="/auth/logout" class="dropdown-item"><i class="feather icon-log-out"></i>
+                                    Logout</a></li>
                         </ul>
                     </div>
                 </div>

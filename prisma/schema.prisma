@@ -68,3 +68,22 @@ model UserLogin {
   DateModified DateTime?
   Status String? @default("A")
 }
+
+model SmtpEmail {
+  IdSmtp       Int       @id @default(autoincrement())
+  Host         String    @db.VarChar(100)
+  Port         Int
+  EnableSSL    Boolean
+  SenderName   String    @db.VarChar(100)
+  SenderEmail  String    @db.VarChar(100)
+  Username     String    @db.VarChar(100)
+  Password     String    @db.VarChar(255)
+  IsActive     Boolean
+  Status       String?   @db.VarChar(255)
+  DateCreated  DateTime? @default(now()) @db.Timestamp(0)
+  DateModified DateTime? @updatedAt @db.Timestamp(0)
+  UserCreated  String?   @db.VarChar(255)
+  UserModified String?   @db.VarChar(255)
+
+  @@map("SmtpEmails")
+}
