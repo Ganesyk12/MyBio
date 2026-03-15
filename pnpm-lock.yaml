@@ -35,6 +35,12 @@ importers:
       multer:
         specifier: ^2.1.1
         version: 2.1.1
+      node-cron:
+        specifier: ^4.2.1
+        version: 4.2.1
+      nodemailer:
+        specifier: ^8.0.2
+        version: 8.0.2
       prisma:
         specifier: ^6.9.0
         version: 6.19.2
@@ -443,12 +449,20 @@ packages:
     resolution: {integrity: sha512-gBVjCaqDlRUk0EwoPNKzIr9KkS9041G/q31IBShPs1Xz6UTA+EXdZADbzqAJQrpDRq71CIMnOP5VMut3SL0z5Q==}
     engines: {node: ^18 || ^20 || >= 21}
 
+  node-cron@4.2.1:
+    resolution: {integrity: sha512-lgimEHPE/QDgFlywTd8yTR61ptugX3Qer29efeyWw2rv259HtGBNn1vZVmp8lB9uo9wC0t/AT4iGqXxia+CJFg==}
+    engines: {node: '>=6.0.0'}
+
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
 
   node-gyp-build@4.8.4:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
     hasBin: true
+
+  nodemailer@8.0.2:
+    resolution: {integrity: sha512-zbj002pZAIkWQFxyAaqoxvn+zoIwRnS40hgjqTXudKOOJkiFFgBeNqjgD3/YCR12sZnrghWYBY+yP1ZucdDRpw==}
+    engines: {node: '>=6.0.0'}
 
   nodemon@3.1.14:
     resolution: {integrity: sha512-jakjZi93UtB3jHMWsXL68FXSAosbLfY0In5gtKq3niLSkrWznrVBzXFNOEMJUfc9+Ke7SHWoAZsiMkNP3vq6Jw==}
@@ -1069,9 +1083,13 @@ snapshots:
 
   node-addon-api@8.6.0: {}
 
+  node-cron@4.2.1: {}
+
   node-fetch-native@1.6.7: {}
 
   node-gyp-build@4.8.4: {}
+
+  nodemailer@8.0.2: {}
 
   nodemon@3.1.14:
     dependencies:

@@ -8,6 +8,7 @@ import cors from 'cors';
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { initEmailCronJob } from './services/emailService.js';
 config();
 
 
@@ -38,6 +39,9 @@ app.use(express.static('public'));
 app.use('/', pageRoutes);
 app.use('/centralize', adminRoutes);
 app.use('/auth', authRoutes);
+
+// Initialize Email Forwarding Cron Job
+initEmailCronJob();
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Express running Apps on http://localhost:${PORT}`);

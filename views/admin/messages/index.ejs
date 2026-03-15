@@ -32,6 +32,7 @@
                                 <th>Subject</th>
                                 <th>Message</th>
                                 <th>Date</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -62,6 +63,17 @@
                                                 }) %>
                                         </td>
                                         <td>
+                                            <% if (msg.Status === 'A') { %>
+                                                <span class="badge badge-light-warning">New</span>
+                                            <% } else if (msg.Status === 'R') { %>
+                                                <span class="badge badge-light-success">Forwarded</span>
+                                            <% } else if (msg.Status === 'N') { %>
+                                                <span class="badge badge-light-danger">Deleted</span>
+                                            <% } else { %>
+                                                <span class="badge badge-light-secondary"><%= msg.Status || 'N/A' %></span>
+                                            <% } %>
+                                        </td>
+                                        <td>
                                             <a href="/centralize/messages/view/<%= msg.IdMail %>"
                                                 class="btn btn-primary btn-sm">
                                                 <i class="feather icon-eye"></i>
@@ -76,7 +88,7 @@
                                     <% }) %>
                                         <% } else { %>
                                             <tr>
-                                                <td colspan="7" class="text-center">No messages found.</td>
+                                                <td colspan="8" class="text-center">No messages found.</td>
                                             </tr>
                                             <% } %>
                         </tbody>
