@@ -4,7 +4,7 @@ import path from 'path';
 // Set storage engine
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/img/portfolio');
+        cb(null, process.env.UPLOAD_DIR || './public/img/portfolio');
     },
     filename: function (req, file, cb) {
         // Create a unique filename: fieldname-timestamp.extension

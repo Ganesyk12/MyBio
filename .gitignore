@@ -2,3 +2,7 @@
 node_modules
 .env
 /generated/prisma
+local-uploads/
+uploads/
+/public/img/portfolio/*
+!/public/img/portfolio/.gitkeep

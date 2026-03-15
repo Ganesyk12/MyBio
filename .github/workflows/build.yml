@@ -59,3 +59,4 @@ jobs:
       EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
+      HOST_UPLOAD_PATH: ${{ secrets.HOST_UPLOAD_PATH }}

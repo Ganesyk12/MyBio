@@ -9,6 +9,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { initEmailCronJob } from './services/emailService.js';
+import fs from 'fs';
 config();
 
 
@@ -27,13 +28,19 @@ app.use(express.urlencoded({ extended: true }));
 // Serve file dari folder public
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Custom Upload Path
+const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, 'public/img/portfolio');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+app.use('/img/portfolio', express.static(uploadDir));
+
 // --- Konfigurasi EJS ---
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
-app.use(express.static('public'));
 
 // Route Definition
 app.use('/', pageRoutes);

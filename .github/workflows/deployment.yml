@@ -21,6 +21,8 @@ on:
         required: true
       DOCKER_REPO:
         required: true
+      HOST_UPLOAD_PATH:
+        required: true
 
 jobs:
     deploy:
@@ -53,11 +55,13 @@ jobs:
 
               docker run -d \
                 -p ${PORT_HOST}:${{ vars.PORT }} \
+                -v ${{ secrets.HOST_UPLOAD_PATH }}:/app/uploads \
                 --network tunnel \
                 --name "${CONTAINER_NAME}" \
                 -e NODE_ENV="production" \
                 -e PORT="${{ vars.PORT }}" \
                 -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+                -e UPLOAD_DIR="/app/uploads" \
                 --restart unless-stopped \
                 "$IMAGE_TAG"
               echo "Deployment completed successfully."
