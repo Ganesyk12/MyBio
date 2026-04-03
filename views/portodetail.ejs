@@ -9,8 +9,13 @@
             <div class="row gy-4 g-lg-5">
                 <div class="col-lg-7">
                     <div class="portfolio-details-card">
-                        <img src="<%= detail.FilePath %>" class="img-fluid" alt="img"
-                            style="width: 100%; display: block;">
+                        <a href="<%= detail.FilePath %>" class="glightbox preview-link" data-gallery="portfolio-gallery">
+                            <img src="<%= detail.FilePath %>" class="img-fluid" alt="<%= project.ProjectName %>"
+                                style="width: 100%; display: block;">
+                            <div class="zoom-icon">
+                                <i class="bi bi-eye"></i>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-5">

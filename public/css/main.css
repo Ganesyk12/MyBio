@@ -1444,6 +1444,17 @@ section,
   }
 }
 
+.portfolio-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio-card-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 /*--------------------------------------------------------------
 # Portfolio Details Section
 --------------------------------------------------------------*/
@@ -1481,6 +1492,37 @@ section,
   padding: 0;
   overflow: hidden;
   box-shadow: var(--glass-shadow);
+  position: relative;
+}
+
+.portfolio-details .portfolio-details-card .zoom-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.portfolio-details .portfolio-details-card:hover .zoom-icon {
+  opacity: 1;
+  visibility: visible;
+  background: var(--accent-color);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
 }
 
 .portfolio-details .portfolio-info {
