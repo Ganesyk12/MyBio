@@ -1,9 +1,11 @@
 import { config } from 'dotenv';
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
+import cookieParser from 'cookie-parser';
 import pageRoutes from './routes/pageRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import { authMiddleware } from './middleware/authMiddleware.js';
 import cors from 'cors';
 import path from "path";
 import { fileURLToPath } from "url";
@@ -25,15 +27,25 @@ app.use(cors());
 app.use(express.json());
 // Middleware untuk mengurai body permintaan dalam format URL-encoded
 app.use(express.urlencoded({ extended: true }));
-// Serve file dari folder public
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware untuk mengurai cookie
+app.use(cookieParser());
+// Serve file dari folder public dengan caching agresif (1 tahun)
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '365d',
+    etag: true,
+    immutable: true
+}));
 
 // Custom Upload Path
 const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, 'public/img/portfolio');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
-app.use('/img/portfolio', express.static(uploadDir));
+app.use('/img/portfolio', express.static(uploadDir, {
+    maxAge: '365d',
+    etag: true,
+    immutable: true
+}));
 
 // --- Konfigurasi EJS ---
 app.set('view engine', 'ejs');
@@ -43,9 +55,9 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
 // Route Definition
-app.use('/', pageRoutes);
-app.use('/centralize', adminRoutes);
-app.use('/auth', authRoutes);
+app.use('/', authRoutes); // Auth routes (login/logout)
+app.use('/', pageRoutes); // Public pages
+app.use('/centralize', authMiddleware, adminRoutes); // Protected admin routes
 
 // Initialize Email Forwarding Cron Job
 initEmailCronJob();

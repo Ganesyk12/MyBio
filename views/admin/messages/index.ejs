@@ -26,7 +26,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
@@ -74,10 +74,17 @@
                                             <% } %>
                                         </td>
                                         <td>
-                                            <a href="/centralize/messages/view/<%= msg.IdMail %>"
-                                                class="btn btn-primary btn-sm">
+                                            <button type="button" 
+                                                class="btn btn-primary btn-sm view-message" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#messageModal"
+                                                data-name="<%= msg.Name %>"
+                                                data-email="<%= msg.Email %>"
+                                                data-subject="<%= msg.Subject %>"
+                                                data-date="<%= new Date(msg.DateCreate).toLocaleString('id-ID') %>"
+                                                data-message="<%= msg.Message %>">
                                                 <i class="feather icon-eye"></i>
-                                            </a>
+                                            </button>
                                             <form action="/centralize/messages/delete/<%= msg.IdMail %>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this message?');">
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     <i class="feather icon-trash-2"></i>
@@ -98,3 +105,76 @@
         </div>
     </div>
 </div>
+
+<!-- Message Detail Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Message Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="fw-bold">From:</label>
+                        <p id="modal-name"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="fw-bold">Email:</label>
+                        <p id="modal-email"></p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="fw-bold">Subject:</label>
+                        <p id="modal-subject"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="fw-bold">Date Received:</label>
+                        <p id="modal-date"></p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="fw-bold">Message Content:</label>
+                        <div class="p-3 bg-light rounded" id="modal-message" style="white-space: pre-wrap; min-height: 150px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="#" id="modal-reply" class="btn btn-primary">Reply via Email</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageModal = document.getElementById('messageModal');
+        if (messageModal) {
+            messageModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                
+                // Extract info from data-* attributes
+                const name = button.getAttribute('data-name');
+                const email = button.getAttribute('data-email');
+                const subject = button.getAttribute('data-subject');
+                const date = button.getAttribute('data-date');
+                const message = button.getAttribute('data-message');
+                
+                // Update modal content
+                document.getElementById('modal-name').textContent = name;
+                document.getElementById('modal-email').textContent = email;
+                document.getElementById('modal-subject').textContent = subject;
+                document.getElementById('modal-date').textContent = date;
+                document.getElementById('modal-message').textContent = message;
+                
+                // Update reply link
+                document.getElementById('modal-reply').href = `mailto:${email}?subject=Re: ${subject}`;
+            });
+        }
+    });
+</script>

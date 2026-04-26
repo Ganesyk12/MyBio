@@ -1,3 +1,9 @@
+<style>
+    .scroll-card-body {
+        max-height: 380px;
+        overflow-y: auto;
+    }
+</style>
 <!-- [ breadcrumb ] start -->
 <div class="page-header">
     <div class="page-block">
@@ -74,24 +80,17 @@
             <div class="card-header">
                 <h5>Recent Projects</h5>
                 <div class="card-header-right">
-                    <div class="btn-group card-option">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="feather icon-more-horizontal"></i>
-                        </button>
-                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
-                            <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
-                            <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
-                        </ul>
-                    </div>
+                    <a href="/centralize/projects" class="text-primary">
+                        <i class="feather icon-chevron-right" style="font-size: 1.5rem;"></i>
+                    </a>
                 </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body p-0 scroll-card-body">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Project Name</th>
                                 <th>Type</th>
                                 <th>Date Created</th>
@@ -124,8 +123,13 @@
         <div class="card">
             <div class="card-header">
                 <h5>Active Skills</h5>
+                <div class="card-header-right">
+                    <a href="/centralize/skills" class="text-primary">
+                        <i class="feather icon-chevron-right" style="font-size: 1.5rem;"></i>
+                    </a>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="card-body scroll-card-body">
                 <% if (typeof skills !== 'undefined' && skills.length > 0) { %>
                     <% skills.forEach(skill => { %>
                     <div class="row align-items-center m-b-20">
@@ -154,16 +158,9 @@
             <div class="card-header">
                 <h5>Recent Messages</h5>
                 <div class="card-header-right">
-                    <div class="btn-group card-option">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="feather icon-more-horizontal"></i>
-                        </button>
-                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
-                            <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
-                            <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
-                        </ul>
-                    </div>
+                    <a href="/centralize/messages" class="text-primary">
+                        <i class="feather icon-chevron-right" style="font-size: 1.5rem;"></i>
+                    </a>
                 </div>
             </div>
             <div class="card-body p-0">
@@ -171,7 +168,7 @@
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
@@ -216,6 +213,11 @@
         <div class="card">
             <div class="card-header">
                 <h5>Project Types</h5>
+                <div class="card-header-right">
+                    <a href="/centralize/projects" class="text-primary">
+                        <i class="feather icon-chevron-right" style="font-size: 1.5rem;"></i>
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <% if (typeof projectTypes !== 'undefined' && projectTypes.length > 0) { %>

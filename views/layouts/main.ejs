@@ -8,18 +8,24 @@
     <title>
         <%= title %>
     </title>
+    <meta name="description" content="Portfolio of Ganes Yudha Kusuma - IT Developer, System Developer, and IT Support specialist. Exploring projects in .NET, Laravel, and Express JS.">
+    <link rel="preload" as="image" href="/img/logo.webp" fetchpriority="high">
     <link href="/img/logo.webp" rel="icon">
+    
+    <!-- Preconnect to CDNs -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link href="/vendor/aos/aos.css" rel="stylesheet">
-    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net" rel="preconnect" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+    <link href="/vendor/aos/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    
     <link href="/css/main.css" rel="stylesheet">
 </head>
 
@@ -31,18 +37,18 @@
         <%- include('../components/footer.ejs') %><a href="#" id="scroll-top"
                 class="scroll-top d-flex align-items-center justify-content-center"><i
                     class="bi bi-arrow-up-short"></i></a>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
                 crossorigin="anonymous"></script>
-            <script src="/vendor/aos/aos.js"></script>
-            <script src="/vendor/waypoints/noframework.waypoints.js"></script>
-            <script src="/vendor/glightbox/js/glightbox.min.js"></script>
-            <script src="/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-            <script src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js">
+            <script defer src="/vendor/aos/aos.js"></script>
+            <script defer src="/vendor/waypoints/noframework.waypoints.js"></script>
+            <script defer src="/vendor/glightbox/js/glightbox.min.js"></script>
+            <script defer src="/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+            <script defer src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js">
             </script>
-            <script src="/js/main.js"></script>
-            <script src="/js/ajax-navigation.js"></script>
+            <script defer src="/js/main.js"></script>
+            <script defer src="/js/ajax-navigation.js"></script>
 </body>
 
 </html>

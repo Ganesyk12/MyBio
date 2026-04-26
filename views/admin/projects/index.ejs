@@ -33,16 +33,7 @@
                             <input type="text" class="form-control" id="searchProject" placeholder="🔍 Search project name...">
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <select class="form-control" id="filterStatus">
-                                <option value="">All Status</option>
-                                <option value="A">Active</option>
-                                <option value="N">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <select class="form-control" id="filterType">
                                 <option value="">All Types</option>
@@ -55,7 +46,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <select class="form-control" id="filterSkill">
                                 <option value="">All Skills</option>
@@ -82,7 +73,7 @@
                     <table class="table table-hover" id="projectsTable">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Project Name</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -162,7 +153,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('searchProject');
-        const filterStatus = document.getElementById('filterStatus');
         const filterType = document.getElementById('filterType');
         const filterSkill = document.getElementById('filterSkill');
         const table = document.getElementById('projectsTable');
@@ -170,7 +160,6 @@
 
         function filterTable() {
             const searchTerm = searchInput.value.toLowerCase();
-            const statusValue = filterStatus.value;
             const typeValue = filterType.value;
             const skillValue = filterSkill.value.toLowerCase();
 
@@ -178,16 +167,14 @@
                 if (row.getAttribute('data-name') === undefined) return;
 
                 const name = row.getAttribute('data-name');
-                const status = row.getAttribute('data-status');
                 const type = row.getAttribute('data-type');
                 const skills = row.getAttribute('data-skills');
 
                 const matchSearch = !searchTerm || name.includes(searchTerm);
-                const matchStatus = !statusValue || status === statusValue;
                 const matchType = !typeValue || type === typeValue;
                 const matchSkill = !skillValue || skills.includes(skillValue) || (skillValue === 'no skill' && skills === 'no skill');
 
-                if (matchSearch && matchStatus && matchType && matchSkill) {
+                if (matchSearch && matchType && matchSkill) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -196,7 +183,6 @@
         }
 
         searchInput.addEventListener('input', filterTable);
-        filterStatus.addEventListener('change', filterTable);
         filterType.addEventListener('change', filterTable);
         filterSkill.addEventListener('change', filterTable);
     });

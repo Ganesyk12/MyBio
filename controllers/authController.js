@@ -1,129 +1,133 @@
-import { UserLoginModel } from "../models/userLoginModel.js";
+import { prisma } from "../lib/prismaClient.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export class AuthController {
-    static async getRegister(req, res) {
-        try {
-            res.render('auth/register', {
-                title: 'Sign Up | Flat Able',
-                layout: 'layouts/auth',
-                message: null
-            });
-        } catch (error) {
-            console.error('Error rendering register page:', error);
-            res.status(500).send('Internal Server Error');
-        }
-    }
-
-    static async postRegister(req, res) {
-        try {
-            const { UserName, Password, ConfirmPassword } = req.body;
-
-            // Validation
-            if (!UserName || !Password) {
-                return res.status(400).render('auth/register', {
-                    title: 'Sign Up | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Username and password are required' }
-                });
-            }
-
-            if (Password !== ConfirmPassword) {
-                return res.status(400).render('auth/register', {
-                    title: 'Sign Up | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Passwords do not match' }
-                });
-            }
-
-            if (Password.length < 6) {
-                return res.status(400).render('auth/register', {
-                    title: 'Sign Up | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Password must be at least 6 characters' }
-                });
-            }
-
-            // Check if username already exists
-            const existingUser = await UserLoginModel.adminGetUserByUsername(UserName);
-            if (existingUser) {
-                return res.status(400).render('auth/register', {
-                    title: 'Sign Up | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Username already exists' }
-                });
-            }
-
-            // Create user
-            await UserLoginModel.adminCreateUser({
-                UserName,
-                Password,
-                Status: 'A'
-            }, 'SYSTEM');
-
-            res.redirect('/auth/login?registered=true');
-        } catch (error) {
-            console.error('Error registering user:', error);
-            res.status(500).send('Internal Server Error');
-        }
-    }
-
+    /**
+     * Render Login Page
+     */
     static async getLogin(req, res) {
-        try {
-            const message = req.query.registered ? 
-                { type: 'success', text: 'Registration successful! Please login.' } : 
-                { type: 'info', text: null };
-
-            res.render('auth/login', {
-                title: 'Sign In | Flat Able',
-                layout: 'layouts/auth',
-                message: req.query.registered ? message : null
-            });
-        } catch (error) {
-            console.error('Error rendering login page:', error);
-            res.status(500).send('Internal Server Error');
-        }
+        res.render('auth/login', {
+            title: 'Login | Admin Panel',
+            layout: false, // Use independent layout for login
+            error: req.query.error || null,
+            success: req.query.success || null
+        });
     }
 
-    static async postLogin(req, res) {
+    /**
+     * Handle Login Process
+     */
+    static async login(req, res) {
+        const { username, password } = req.body;
+
         try {
-            const { UserName, Password } = req.body;
-
-            if (!UserName || !Password) {
-                return res.status(400).render('auth/login', {
-                    title: 'Sign In | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Username and password are required' }
-                });
-            }
-
-            const user = await UserLoginModel.authenticateUser(UserName, Password);
+            // Find user by username
+            const user = await prisma.userLogin.findUnique({
+                where: { UserName: username }
+            });
 
             if (!user) {
-                return res.status(401).render('auth/login', {
-                    title: 'Sign In | Flat Able',
-                    layout: 'layouts/auth',
-                    message: { type: 'error', text: 'Invalid username or password' }
-                });
+                return res.redirect('/login?error=Invalid username or password');
             }
 
-            // Store user in session (you'll need to setup express-session)
-            // req.session.user = user;
+            // Check if account is active
+            if (user.Status !== 'A') {
+                return res.redirect('/login?error=Account is inactive');
+            }
 
+            // Compare password
+            const isMatch = await bcrypt.compare(password, user.Password);
+
+            if (!isMatch) {
+                return res.redirect('/login?error=Invalid username or password');
+            }
+
+            // Generate JWT
+            const token = jwt.sign(
+                { id: user.IdUserLogin, username: user.UserName },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRATION || '24h' }
+            );
+
+            // Set HttpOnly Cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000 // 1 day
+            });
+
+            // Redirect to admin dashboard
             res.redirect('/centralize');
         } catch (error) {
-            console.error('Error logging in user:', error);
-            res.status(500).send('Internal Server Error');
+            console.error('Login Error:', error);
+            res.redirect('/login?error=Server error, please try again later');
         }
     }
 
+    /**
+     * Handle Logout Process
+     */
     static async logout(req, res) {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        });
+        res.redirect('/login');
+    }
+
+    /**
+     * Render Register Page
+     */
+    static async getRegister(req, res) {
+        res.render('auth/register', {
+            title: 'Register | Admin Panel',
+            layout: false,
+            error: req.query.error || null,
+            success: req.query.success || null
+        });
+    }
+
+    /**
+     * Handle Registration Process
+     */
+    static async register(req, res) {
+        const { username, password, confirmPassword } = req.body;
+
         try {
-            // Destroy session
-            // req.session.destroy();
-            res.redirect('/auth/login');
+            // Basic validation
+            if (password !== confirmPassword) {
+                return res.redirect('/register?error=Passwords do not match');
+            }
+
+            // Check if user already exists
+            const existingUser = await prisma.userLogin.findUnique({
+                where: { UserName: username }
+            });
+
+            if (existingUser) {
+                return res.redirect('/register?error=Username is already taken');
+            }
+
+            // Hash password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            // Create user
+            await prisma.userLogin.create({
+                data: {
+                    UserName: username,
+                    Password: hashedPassword,
+                    Status: 'A' // Active by default
+                }
+            });
+
+            res.redirect('/login?success=Account created successfully. Please login.');
         } catch (error) {
-            console.error('Error logging out:', error);
-            res.status(500).send('Internal Server Error');
+            console.error('Registration Error:', error);
+            res.redirect('/register?error=Server error, please try again later');
         }
     }
 }

@@ -1,0 +1,26 @@
+First Contentful Paint
+3.3 s
+
+Largest Contentful Paint
+4.2 s
+
+Insights
+Render blocking requests Est savings of 2,570 ms
+Use efficient cache lifetimes Est savings of 90 KiB
+Improve image delivery Est savings of 51 KiB
+Font display Est savings of 60 ms
+Forced reflow
+Network dependency tree
+
+
+Reduce unused JavaScript Est savings of 42 KiB
+Reduce unused CSS Est savings of 44 KiB
+Image elements do not have explicit width and height
+Minify CSS Est savings of 2 KiB
+
+
+
+Document does not have a meta description
+Format your HTML in a way that enables crawlers to better understand your app’s content.
+Crawling and Indexing
+robots.txt is not valid 1 error found

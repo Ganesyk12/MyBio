@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /centralize/
+Disallow: /auth/
+
+Sitemap: https://ganesyk.votagers.or.id/sitemap.xml

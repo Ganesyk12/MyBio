@@ -198,25 +198,40 @@
   });
 
   /**
-   * Navmenu Scrollspy
+   * Navmenu Scrollspy using IntersectionObserver
    */
   let navmenulinks = document.querySelectorAll('.navmenu a');
 
-  function navmenuScrollspy() {
-    navmenulinks.forEach(navmenulink => {
-      if (!navmenulink.hash) return;
-      let section = document.querySelector(navmenulink.hash);
-      if (!section) return;
-      let position = window.scrollY + 200;
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
-        document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
-        navmenulink.classList.add('active');
-      } else {
-        navmenulink.classList.remove('active');
-      }
-    })
+  function initScrollspy() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px', // Adjust to trigger when section is in middle-top
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navmenulinks.forEach(link => {
+            if (link.hash === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections that have an ID corresponding to a nav link
+    navmenulinks.forEach(link => {
+      if (!link.hash || link.hash === '#') return;
+      const section = document.querySelector(link.hash);
+      if (section) observer.observe(section);
+    });
   }
-  window.addEventListener('load', navmenuScrollspy);
-  document.addEventListener('scroll', navmenuScrollspy);
+
+  window.addEventListener('load', initScrollspy);
 
 })();
