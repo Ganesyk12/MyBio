@@ -10,19 +10,21 @@ on:
       container_name:
         required: true
         type: string
-    secrets:
-      SSH_PRIVATE_KEY:
-        required: true
-      EC2_HOST:
-        required: true
-      EC2_USERNAME:
-        required: true
-      DATABASE_URL:
-        required: true
-      DOCKER_REPO:
-        required: true
-      HOST_UPLOAD_PATH:
-        required: true
+      secrets:
+        SSH_PRIVATE_KEY:
+          required: true
+        EC2_HOST:
+          required: true
+        EC2_USERNAME:
+          required: true
+        DATABASE_URL:
+          required: true
+        DOCKER_REPO:
+          required: true
+        HOST_UPLOAD_PATH:
+          required: true
+        JWT_SECRET:
+          required: true
 
 jobs:
     deploy:
@@ -62,6 +64,8 @@ jobs:
                 -e PORT="${{ vars.PORT }}" \
                 -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
                 -e UPLOAD_DIR="/app/uploads" \
+                -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+                -e JWT_EXPIRATION="24h" \
                 --restart unless-stopped \
                 "$IMAGE_TAG"
               echo "Deployment completed successfully."

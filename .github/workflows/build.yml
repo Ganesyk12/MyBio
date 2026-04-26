@@ -60,3 +60,4 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
       HOST_UPLOAD_PATH: ${{ secrets.HOST_UPLOAD_PATH }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
