@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 # Install pnpm
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml .npmrc ./
 COPY prisma ./prisma/
 # Set proper Prisma binary target
 ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
