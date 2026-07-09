@@ -1,14 +1,17 @@
 services:
   web:
     build: .
-    ports:
-      - "5000:5000"
     volumes:
-      - .:/app
-      - /app/node_modules
-      - ${HOST_UPLOAD_PATH:-./local-uploads}:/app/uploads
-    environment:
-      - PORT=5000
-      - DATABASE_URL=${DATABASE_URL}
+      - ${HOST_UPLOAD_PATH}:/app/uploads
+    networks:
+      - tunnel
     env_file:
       - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    restart: unless-stopped
+
+networks:
+  tunnel:
+    external: true
