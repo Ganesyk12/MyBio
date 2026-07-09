@@ -1,10 +1,17 @@
 import multer from 'multer';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const uploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/img/portfolio');
 
 // Set storage engine
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.env.UPLOAD_DIR || './public/img/portfolio');
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         // Create a unique filename: fieldname-timestamp.extension

@@ -54,9 +54,10 @@ jobs:
       image_tag: ${{ needs.build-and-push.outputs.image_tag }}
       container_name: ${{ needs.build-and-push.outputs.container_name }}
     secrets:
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+      EC2_PORT: ${{ secrets.EC2_PORT }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
       HOST_UPLOAD_PATH: ${{ secrets.HOST_UPLOAD_PATH }}

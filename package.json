@@ -1,7 +1,7 @@
 {
   "name": "mypage-porto",
   "version": "1.0.0",
-  "description": "",
+  "description": "Personal Portfolio",
   "main": "index.js",
   "scripts": {
     "build": "npx prisma generate",

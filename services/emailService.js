@@ -19,6 +19,11 @@ export const forwardUnreadEmails = async () => {
             return;
         }
 
+        if (!smtpConfig.ForwardTo) {
+            console.warn('⚠️ [Email Service] ForwardTo email not configured. Aborting...');
+            return;
+        }
+
         // 2. Fetch Unread Messages (Status 'A')
         const unreadMessages = await prisma.emailReceive.findMany({
             where: {
@@ -53,7 +58,7 @@ export const forwardUnreadEmails = async () => {
             try {
                 const mailOptions = {
                     from: `"${smtpConfig.SenderName}" <${smtpConfig.SenderEmail}>`, // sender address
-                    to: 'ganesyudhakusuma@gmail.com', // list of receivers
+                    to: smtpConfig.ForwardTo,
                     subject: `[Portfolio Inbox] New Message from ${message.Name}`, // Subject line
                     html: `
                         <h3>New Contact Form Submission</h3>

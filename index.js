@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 }));
 
 // Custom Upload Path
-const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, 'public/img/portfolio');
+const uploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, 'public/img/portfolio');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }

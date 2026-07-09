@@ -11,11 +11,13 @@ on:
         required: true
         type: string
     secrets:
-      SSH_PRIVATE_KEY:
+      SSH_PASSWORD:
         required: true
       EC2_HOST:
         required: true
       EC2_USERNAME:
+        required: true
+      EC2_PORT:
         required: true
       DATABASE_URL:
         required: true
@@ -36,7 +38,8 @@ jobs:
           with:
             host: ${{ secrets.EC2_HOST }}
             username: ${{ secrets.EC2_USERNAME }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.EC2_PORT }}
+            password: ${{ secrets.SSH_PASSWORD }}
             script: |
               CONTAINER_NAME="${{ inputs.container_name }}"
               IMAGE_TAG="${{ secrets.DOCKER_REPO }}:${{ inputs.image_tag }}"
@@ -45,25 +48,14 @@ jobs:
               docker rm "${CONTAINER_NAME}" || true
               docker pull "$IMAGE_TAG"
 
-              # Generate random port antara 5000 dan 8500
-              while :
-              do
-                PORT_HOST=$(( ( RANDOM % 3500 ) + 5000 ))
-                if ! ss -tuln | grep -q ":$PORT_HOST "; then
-                  break
-                fi
-              done
-              echo "Random available port selected: $PORT_HOST"
-
               docker run -d \
-                -p ${PORT_HOST}:${{ vars.PORT }} \
                 -v ${{ secrets.HOST_UPLOAD_PATH }}:/app/uploads \
                 --network tunnel \
+                --user 1000:1000 \
                 --name "${CONTAINER_NAME}" \
                 -e NODE_ENV="production" \
                 -e PORT="${{ vars.PORT }}" \
                 -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-                -e UPLOAD_DIR="/app/uploads" \
                 -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
                 -e JWT_EXPIRATION="24h" \
                 --restart unless-stopped \

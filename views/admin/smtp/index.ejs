@@ -36,6 +36,7 @@
                                 <th>Port</th>
                                 <th>Sender Name</th>
                                 <th>Sender Email</th>
+                                <th>Forward To</th>
                                 <th>Active</th>
                                 <th>Actions</th>
                             </tr>
@@ -49,6 +50,7 @@
                                     <td><%= smtp.Port %></td>
                                     <td><%= smtp.SenderName %></td>
                                     <td><%= smtp.SenderEmail %></td>
+                                    <td><%= smtp.ForwardTo || '-' %></td>
                                     <td>
                                         <% if (smtp.IsActive) { %>
                                             <span class="badge badge-light-success">Yes</span>
@@ -73,7 +75,7 @@
                                 <% }) %>
                             <% } else { %>
                                 <tr>
-                                    <td colspan="7" class="text-center">No SMTP configurations found.</td>
+                                    <td colspan="8" class="text-center">No SMTP configurations found.</td>
                                 </tr>
                             <% } %>
                         </tbody>

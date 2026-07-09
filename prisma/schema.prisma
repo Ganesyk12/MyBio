@@ -76,6 +76,7 @@ model SmtpEmail {
   EnableSSL    Boolean
   SenderName   String    @db.VarChar(100)
   SenderEmail  String    @db.VarChar(100)
+  ForwardTo    String?   @db.VarChar(255)
   Username     String    @db.VarChar(100)
   Password     String    @db.VarChar(255)
   IsActive     Boolean
