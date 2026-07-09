@@ -12,7 +12,7 @@ COPY prisma ./prisma/
 # Set proper Prisma binary target
 ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
 # Install dependencies & generate Prisma client
-RUN pnpm install --frozen-lockfile && \
+RUN pnpm install && \
     pnpm prisma generate
 COPY . .
 EXPOSE 5000
