@@ -2,6 +2,7 @@ services:
   web:
     container_name: personalweb
     build: .
+    user: "1000:1000"
     volumes:
       - ${HOST_UPLOAD_PATH}:/app/uploads
     networks:
