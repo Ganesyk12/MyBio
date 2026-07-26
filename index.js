@@ -20,7 +20,6 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
 // Mengaktifkan CORS untuk permintaan lintas domain
 app.use(cors());
 // Middleware untuk mengurai body permintaan dalam format JSON
