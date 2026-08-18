@@ -70,13 +70,19 @@
       window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
     }
   }
-  scrollTop.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+  if (scrollTop) {
+    scrollTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.lenis) {
+        window.lenis.scrollTo(0);
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
     });
-  });
+  }
 
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);
@@ -188,10 +194,15 @@
         setTimeout(() => {
           let section = document.querySelector(window.location.hash);
           let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
-          window.scrollTo({
-            top: section.offsetTop - parseInt(scrollMarginTop),
-            behavior: 'smooth'
-          });
+          const targetOffset = section.offsetTop - parseInt(scrollMarginTop);
+          if (window.lenis) {
+            window.lenis.scrollTo(targetOffset);
+          } else {
+            window.scrollTo({
+              top: targetOffset,
+              behavior: 'smooth'
+            });
+          }
         }, 100);
       }
     }
@@ -233,5 +244,25 @@
   }
 
   window.addEventListener('load', initScrollspy);
+
+  /**
+   * Initialize Lenis smooth scroll
+   */
+  if (typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Store globally so other scripts (like ajax-navigation) can access it
+    window.lenis = lenis;
+  }
 
 })();

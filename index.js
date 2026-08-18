@@ -46,6 +46,17 @@ app.use('/img/portfolio', express.static(uploadDir, {
     immutable: true
 }));
 
+// Custom CV Upload Path (Persistent in Docker volume)
+const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, 'public/uploads');
+if (!fs.existsSync(cvUploadDir)) {
+    fs.mkdirSync(cvUploadDir, { recursive: true });
+}
+app.use('/uploads', express.static(cvUploadDir, {
+    maxAge: '365d',
+    etag: true,
+    immutable: true
+}));
+
 // --- Konfigurasi EJS ---
 app.set('view engine', 'ejs');
 app.set('views', './views');

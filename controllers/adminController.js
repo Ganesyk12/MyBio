@@ -1,5 +1,12 @@
 import { prisma } from "../lib/prismaClient.js";
 import { withTimeout } from "../utils/withTimeout.js";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export class AdminController {
     static async getDashboard(req, res) {
@@ -46,6 +53,10 @@ export class AdminController {
                 }
             }));
 
+            const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
+            const cvPath = path.join(cvUploadDir, 'cv.pdf');
+            const cvExists = fs.existsSync(cvPath);
+
             res.render('admin/dashboard', {
                 title: 'Admin Dashboard | MyBio',
                 activePage: 'dashboard',
@@ -58,11 +69,26 @@ export class AdminController {
                 recentProjects,
                 skills,
                 recentMessages,
-                projectTypes
+                projectTypes,
+                cvExists,
+                error: req.query.error,
+                success: req.query.success
             });
         } catch (error) {
             console.error('Error rendering admin dashboard:', error);
             res.status(500).send('Internal Server Error');
+        }
+    }
+
+    static async postUploadCV(req, res) {
+        try {
+            if (!req.file) {
+                return res.redirect('/centralize?error=No+file+uploaded');
+            }
+            res.redirect('/centralize?success=CV+uploaded+successfully');
+        } catch (error) {
+            console.error('Error in postUploadCV:', error);
+            res.redirect('/centralize?error=Internal+Server+Error');
         }
     }
 }

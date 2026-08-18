@@ -4,7 +4,7 @@ import { AdminProjectController } from '../controllers/adminProjectController.js
 import { AdminSkillController } from '../controllers/adminSkillController.js';
 import { AdminMessageController } from '../controllers/adminMessageController.js';
 import { AdminSmtpController } from '../controllers/adminSmtpController.js';
-import { upload } from '../utils/upload.js';
+import { upload, uploadCV } from '../utils/upload.js';
 
 const router = express.Router();
 
@@ -39,5 +39,16 @@ router.post('/smtp/create', AdminSmtpController.postCreate);
 router.get('/smtp/edit/:id', AdminSmtpController.getEdit);
 router.post('/smtp/edit/:id', AdminSmtpController.postEdit);
 router.post('/smtp/delete/:id', AdminSmtpController.delete);
+
+// Admin CV Upload
+router.post('/upload-cv', (req, res, next) => {
+    uploadCV.single('cvFile')(req, res, (err) => {
+        if (err) {
+            console.error('CV Upload Error:', err);
+            return res.redirect('/centralize?error=' + encodeURIComponent(err.message || err));
+        }
+        next();
+    });
+}, AdminController.postUploadCV);
 
 export default router;

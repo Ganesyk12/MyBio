@@ -20,7 +20,11 @@ async function loadPage(url, push = true) {
         });
 
         // Scroll to top
-        window.scrollTo(0, 0);
+        if (window.lenis) {
+            window.lenis.scrollTo(0, { immediate: true });
+        } else {
+            window.scrollTo(0, 0);
+        }
 
         // Re-init AOS if needed
         if (typeof AOS !== 'undefined') {

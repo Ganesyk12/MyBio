@@ -23,6 +23,26 @@
 <!-- [ breadcrumb ] end -->
 
 <!-- [ Main Content ] start -->
+<% if (typeof success !== 'undefined' && success) { %>
+    <div class="col-12">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+<% } %>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="col-12">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+<% } %>
 <div class="row">
     <!-- Summary Cards Row -->
     <div class="col-md-6 col-xl-3">
@@ -285,5 +305,71 @@
             </div>
         </div>
     </div>
+
+    <!-- CV Management Card -->
+    <div class="col-xl-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>CV Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h6 class="mb-3">Current CV Status</h6>
+                        <% if (typeof cvExists !== 'undefined' && cvExists) { %>
+                            <div class="alert alert-success d-flex align-items-center p-3" role="alert">
+                                <i class="feather icon-check-circle mr-3" style="font-size: 1.8rem; vertical-align: middle;"></i>
+                                <div>
+                                    <span class="d-block font-weight-bold">CV is uploaded and active.</span>
+                                    <a href="/uploads/cv.pdf" target="_blank" class="alert-link text-underline d-inline-block mt-1">
+                                        <i class="feather icon-download mr-1"></i> View/Download Current CV
+                                    </a>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="alert alert-warning d-flex align-items-center p-3" role="alert">
+                                <i class="feather icon-alert-triangle mr-3" style="font-size: 1.8rem; vertical-align: middle;"></i>
+                                <div>
+                                    <span class="d-block font-weight-bold">No CV uploaded yet.</span>
+                                    <span class="text-sm">The homepage button will default to "Let's Connect".</span>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="mb-3">Upload New CV (PDF only, max 10MB)</h6>
+                        <form action="/centralize/upload-cv" method="POST" enctype="multipart/form-data">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="cvFile" class="custom-file-input" id="cvFile" accept=".pdf" required>
+                                    <label class="custom-file-label text-truncate" for="cvFile">Choose PDF file...</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Upload CV</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- [ Main Content ] end -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var cvFileInput = document.getElementById('cvFile');
+        if (cvFileInput) {
+            cvFileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    var fileName = e.target.files[0].name;
+                    var label = e.target.nextElementSibling;
+                    if (label) {
+                        label.innerText = fileName;
+                    }
+                }
+            });
+        }
+    });
+</script>
