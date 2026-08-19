@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // Serve file dari folder public dengan caching agresif (1 tahun)
 app.use(express.static(path.join(__dirname, 'public'), {
-    maxAge: '365d',
+    maxAge: '7d',
     etag: true,
     immutable: true
 }));
@@ -41,7 +41,7 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 app.use('/img/portfolio', express.static(uploadDir, {
-    maxAge: '365d',
+    maxAge: '7d',
     etag: true,
     immutable: true
 }));
@@ -52,7 +52,7 @@ if (!fs.existsSync(cvUploadDir)) {
     fs.mkdirSync(cvUploadDir, { recursive: true });
 }
 app.use('/uploads', express.static(cvUploadDir, {
-    maxAge: '365d',
+    maxAge: '7d',
     etag: true,
     immutable: true
 }));
