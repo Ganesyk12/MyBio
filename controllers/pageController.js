@@ -1,4 +1,5 @@
 import { SkillModel } from "../models/skillModel.js";
+import { ProjectModel } from "../models/projectModel.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -14,10 +15,17 @@ export class PageController {
             const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
             const cvPath = path.join(cvUploadDir, 'cv.pdf');
             const cvExists = fs.existsSync(cvPath);
+            
+            const skills = await SkillModel.getListSkill();
+            const { type, project } = await ProjectModel.getProjectType();
+
             res.render('index', {
                 title: 'Portfolio | Ganes Yudha Kusuma',
                 activePage: 'index',
                 cvExists,
+                skills,
+                type,
+                project,
                 layout: isAjax ? false : 'layouts/main'
             });
         } catch (error) {

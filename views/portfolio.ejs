@@ -9,10 +9,10 @@
         </div>
     </div>
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+        <div class="portfolio-slider-layout">
             <!-- Filter -->
             <div class="portfolio-filters-container" data-aos="fade-up" data-aos-delay="200">
-                <ul class="portfolio-filters isotope-filters">
+                <ul class="portfolio-filters">
                     <li class="filter-active" data-filter="*">All Work</li>
                     <% type.forEach(item=> { %>
                         <li data-filter=".filter-<%= item.IdType %>">
@@ -21,32 +21,42 @@
                         <% }) %>
                 </ul>
             </div>
-            <!-- Grid Container (Semua item dalam 1 row) -->
-            <div class="row g-4 isotope-container">
-                <% project.forEach((p, index)=> { %>
-                    <% if (p.FilePath) { %>
-                        <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-<%= p.IdType %>">
-                            <div data-aos="fade-up" data-aos-delay="<%= (index % 4) * 100 %>">
-                                <a href="/portfolio/<%= p.IdProject %>" class="portfolio-card-link">
-                                    <div class="portfolio-card">
-                                        <div class="portfolio-image">
-                                            <img src="<%= p.FilePath %>" class="img-fluid" alt="<%= p.ProjectName %>"
-                                                loading="lazy">
+            
+            <!-- Slider Wrapper -->
+            <div class="portfolio-slider-container" data-aos="fade-up" data-aos-delay="300">
+                <!-- Swiper -->
+                <div class="swiper portfolio-swiper">
+                    <div class="swiper-wrapper">
+                        <% project.forEach((p, index)=> { %>
+                            <% if (p.FilePath) { %>
+                                <div class="swiper-slide portfolio-slide-item" data-type="<%= p.IdType %>">
+                                    <a href="/portfolio/<%= p.IdProject %>" class="portfolio-card-link">
+                                        <div class="portfolio-card">
+                                            <div class="portfolio-image">
+                                                <img src="<%= p.FilePath %>" class="img-fluid" alt="<%= p.ProjectName %>" loading="lazy">
+                                            </div>
+                                            <div class="portfolio-content">
+                                                <span class="category"><%= p.TypeName %></span>
+                                                <h3><%= p.ProjectName %></h3>
+                                            </div>
                                         </div>
-                                        <div class="portfolio-content">
-                                            <span class="category">
-                                                <%= p.TypeName %>
-                                            </span>
-                                            <h3>
-                                                <%= p.ProjectName %>
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    <% } %>
-                <% }) %>
+                                    </a>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                
+                <!-- Navigation -->
+                <button class="slider-btn slider-prev" aria-label="Previous Slide">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="slider-btn slider-next" aria-label="Next Slide">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>

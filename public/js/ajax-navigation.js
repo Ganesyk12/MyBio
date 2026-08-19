@@ -1,3 +1,5 @@
+let lastPathname = window.location.pathname;
+
 // Function to load page content
 async function loadPage(url, push = true) {
     try {
@@ -9,6 +11,7 @@ async function loadPage(url, push = true) {
         // Update URL
         if (push) {
             history.pushState(null, null, url);
+            lastPathname = window.location.pathname;
         }
 
         // Update active nav
@@ -31,6 +34,11 @@ async function loadPage(url, push = true) {
             AOS.refresh();
         }
 
+        // Re-init Portfolio Slider if needed
+        if (typeof window.initPortfolioSlider === 'function') {
+            window.initPortfolioSlider();
+        }
+
     } catch (err) {
         console.error(err);
         window.location.href = url; // Fallback to normal navigation
@@ -47,5 +55,8 @@ document.querySelectorAll('a[data-ajax-nav]').forEach(link => {
 
 // Handle browser back/forward buttons
 window.addEventListener('popstate', () => {
-    loadPage(window.location.pathname, false);
+    if (window.location.pathname !== lastPathname) {
+        lastPathname = window.location.pathname;
+        loadPage(window.location.pathname, false);
+    }
 });

@@ -263,6 +263,195 @@
 
     // Store globally so other scripts (like ajax-navigation) can access it
     window.lenis = lenis;
+
+    // Smooth scroll for hash links on the same page
+    document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        const hashIndex = href.indexOf('#');
+        if (hashIndex !== -1) {
+          const hash = href.substring(hashIndex);
+          const target = document.querySelector(hash);
+          if (target) {
+            const pathPart = href.substring(0, hashIndex);
+            // If the link points to the current page (same pathname or empty path before #)
+            if (pathPart === '' || pathPart === '/' || window.location.pathname === pathPart) {
+              e.preventDefault();
+              lenis.scrollTo(target);
+              history.pushState(null, null, href);
+            }
+          }
+        }
+      });
+    });
   }
+
+  /**
+   * Interactive Custom Cursor Follower
+   */
+  const cursorDot = document.querySelector('.custom-cursor-dot');
+  const cursorFollower = document.querySelector('.custom-cursor-follower');
+
+  if (cursorDot && cursorFollower) {
+    let mouseX = 0, mouseY = 0; // Current mouse position
+    let followerX = 0, followerY = 0; // Current follower position
+    let isHidden = true;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (isHidden) {
+        isHidden = false;
+        cursorDot.style.opacity = '1';
+        cursorFollower.style.opacity = '1';
+        followerX = mouseX;
+        followerY = mouseY;
+      }
+
+      // Immediately move the dot to the mouse position
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+    });
+
+    let currentAngle = 0;
+
+    // Lerp animation for follower
+    function animateFollower() {
+      const diffX = mouseX - followerX;
+      const diffY = mouseY - followerY;
+      const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+
+      // Lerp formula: current = current + (target - current) * speed
+      followerX += diffX * 0.12;
+      followerY += diffY * 0.12;
+
+      cursorFollower.style.left = followerX + 'px';
+      cursorFollower.style.top = followerY + 'px';
+
+      // Control rotation and chomping animation
+      if (distance > 3) {
+        cursorFollower.style.animationPlayState = 'running';
+        const targetAngle = Math.atan2(diffY, diffX) * (180 / Math.PI);
+        currentAngle = targetAngle;
+        cursorFollower.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+      } else {
+        cursorFollower.style.animationPlayState = 'paused';
+        cursorFollower.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+      }
+
+      requestAnimationFrame(animateFollower);
+    }
+    animateFollower();
+
+    // Mouse leave / enter window
+    document.addEventListener('mouseleave', () => {
+      cursorDot.style.opacity = '0';
+      cursorFollower.style.opacity = '0';
+      isHidden = true;
+    });
+
+    document.addEventListener('mouseenter', () => {
+      cursorDot.style.opacity = '1';
+      cursorFollower.style.opacity = '1';
+      isHidden = false;
+    });
+
+    // Hover state detection
+    const clickableElements = 'a, button, .btn, .portfolio-item, .skill-badge-pro, .skill-box, .mobile-nav-toggle, input, textarea, select, .glightbox, .preview-link';
+    
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(clickableElements)) {
+        document.body.classList.add('cursor-hover');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (!e.target.closest(clickableElements)) {
+        document.body.classList.remove('cursor-hover');
+      }
+    });
+  }
+
+  /**
+   * Initialize Portfolio Slider/Carousel (Swiper)
+   */
+  function initPortfolioSlider() {
+    const swiperElement = document.querySelector('.portfolio-swiper');
+    if (!swiperElement) return;
+
+    // Initialize Swiper
+    const swiper = new Swiper(swiperElement, {
+      slidesPerView: 1,
+      spaceBetween: 25,
+      grabCursor: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+      },
+      navigation: {
+        nextEl: '.slider-next',
+        prevEl: '.slider-prev',
+      },
+      breakpoints: {
+        576: {
+          slidesPerView: 1.5,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        992: {
+          slidesPerView: 3,
+        }
+      }
+    });
+
+    // Filter functionality
+    const filters = document.querySelectorAll('.portfolio-filters li');
+    const slides = document.querySelectorAll('.portfolio-slide-item');
+
+    filters.forEach(filter => {
+      // Clone filter to reset any duplicate listeners in case of AJAX re-inits
+      const newFilter = filter.cloneNode(true);
+      filter.parentNode.replaceChild(newFilter, filter);
+
+      newFilter.addEventListener('click', function() {
+        // Toggle active class on filters
+        document.querySelectorAll('.portfolio-filters li').forEach(f => f.classList.remove('filter-active'));
+        this.classList.add('filter-active');
+
+        const filterVal = this.getAttribute('data-filter');
+
+        // Fade out slides
+        swiperElement.style.opacity = '0';
+        
+        setTimeout(() => {
+          slides.forEach(slide => {
+            const type = slide.getAttribute('data-type');
+            
+            if (filterVal === '*' || filterVal === `.filter-${type}`) {
+              slide.style.display = '';
+              slide.classList.add('swiper-slide');
+            } else {
+              slide.style.display = 'none';
+              slide.classList.remove('swiper-slide');
+            }
+          });
+
+          // Update Swiper layout and slide calculation, then return to slide 1
+          swiper.update();
+          swiper.slideTo(0, 0);
+          
+          // Fade in back
+          swiperElement.style.opacity = '1';
+        }, 300);
+      });
+    });
+  }
+
+  // Expose globally and listen to load
+  window.initPortfolioSlider = initPortfolioSlider;
+  window.addEventListener('load', initPortfolioSlider);
 
 })();

@@ -1,10 +1,5 @@
 <section id="portfolio-details" class="portfolio-details section">
     <div class="container" data-aos="fade-down">
-        <div class="mb-4">
-            <a href="/portfolio" class="btn-back-glass">
-                <i class="bi bi-arrow-left"></i> Back to Portfolio
-            </a>
-        </div>
         <% project.ProjectDetail.forEach(detail=> { %>
             <div class="row gy-4 g-lg-5">
                 <div class="col-lg-7">
@@ -17,20 +12,24 @@
                             </div>
                         </a>
                     </div>
+                    <div class="mt-4">
+                        <a href="/#portfolio" class="btn-back-glass">
+                            <i class="bi bi-arrow-left"></i> Back to Portfolio
+                        </a>
+                    </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="position-sticky" style="top: 100px">
-                        <div class="portfolio-description mb-5">
+                        <div class="portfolio-info">
                             <h2 class="text-accent mb-4"
-                                style="font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
+                                style="font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 1.8rem;">
                                 <%= project.ProjectName %>
                             </h2>
-                            <p style="text-align: justify; line-height: 1.8; opacity: 0.8;">
+                            <p style="text-align: justify; line-height: 1.8; opacity: 0.8; margin-bottom: 30px;">
                                 <%= detail.Description %>
                             </p>
-                        </div>
-                        <div class="portfolio-info">
-                            <h3>Project Information</h3>
+                            
+                            <h3 style="border-top: 1px solid var(--glass-border); padding-top: 20px;">Project Information</h3>
                             <div class="row gy-4">
                                 <div class="col-12 col-md-6">
                                     <ul>
