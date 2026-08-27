@@ -15,6 +15,7 @@ ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
 RUN pnpm install --ignore-scripts --config.minimum-release-age=0 && \
     ./node_modules/.bin/prisma generate
 COPY . .
+RUN chown -R 1000:1000 /app
 EXPOSE 5000
 # Default start command
-CMD ["pnpm", "start"]
+CMD ["node", "index.js"]
