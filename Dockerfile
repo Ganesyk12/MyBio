@@ -12,7 +12,7 @@ COPY prisma ./prisma/
 # Set proper Prisma binary target
 ENV PRISMA_GENERATE_SKIP_AUTOINSTALL=true
 # Install dependencies & generate Prisma client
-RUN pnpm install --ignore-scripts && \
+RUN pnpm install --ignore-scripts --config.minimum-release-age=0 && \
     ./node_modules/.bin/prisma generate
 COPY . .
 EXPOSE 5000
