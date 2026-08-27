@@ -321,7 +321,7 @@
                                 <i class="feather icon-check-circle mr-3" style="font-size: 1.8rem; vertical-align: middle;"></i>
                                 <div>
                                     <span class="d-block font-weight-bold">CV is uploaded and active.</span>
-                                    <a href="/uploads/cv.pdf" target="_blank" class="alert-link text-underline d-inline-block mt-1">
+                                    <a href="<%= typeof cvUrl !== 'undefined' ? cvUrl : '/uploads/cv.pdf' %>" target="_blank" class="alert-link text-underline d-inline-block mt-1">
                                         <i class="feather icon-download mr-1"></i> View/Download Current CV
                                     </a>
                                 </div>

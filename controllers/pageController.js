@@ -1,5 +1,6 @@
 import { SkillModel } from "../models/skillModel.js";
 import { ProjectModel } from "../models/projectModel.js";
+import { isR2Configured, checkR2FileExists, getPublicUrl } from "../services/r2Service.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -12,9 +13,17 @@ export class PageController {
     static async getHome(req, res) {
         try {
             const isAjax = req.xhr;
-            const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
-            const cvPath = path.join(cvUploadDir, 'cv.pdf');
-            const cvExists = fs.existsSync(cvPath);
+            let cvExists = false;
+            let cvUrl = '/uploads/cv.pdf';
+
+            if (isR2Configured()) {
+                cvExists = await checkR2FileExists('uploads/cv.pdf');
+                cvUrl = getPublicUrl('uploads/cv.pdf');
+            } else {
+                const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
+                const cvPath = path.join(cvUploadDir, 'cv.pdf');
+                cvExists = fs.existsSync(cvPath);
+            }
             
             const skills = await SkillModel.getListSkill();
             const { type, project } = await ProjectModel.getProjectType();
@@ -23,6 +32,7 @@ export class PageController {
                 title: 'Portfolio | Ganes Yudha Kusuma',
                 activePage: 'index',
                 cvExists,
+                cvUrl,
                 skills,
                 type,
                 project,

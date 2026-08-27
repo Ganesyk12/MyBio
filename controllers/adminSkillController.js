@@ -31,10 +31,10 @@ export class AdminSkillController {
     static async postCreate(req, res) {
         try {
             await SkillModel.adminCreateSkill(req.body);
-            res.redirect('/centralize/skills');
+            res.redirect('/centralize/skills?success=' + encodeURIComponent('Skill created successfully!'));
         } catch (error) {
             console.error('Error creating skill:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/skills?error=' + encodeURIComponent('Failed to create skill: ' + error.message));
         }
     }
 
@@ -56,10 +56,10 @@ export class AdminSkillController {
     static async postEdit(req, res) {
         try {
             await SkillModel.adminUpdateSkill(req.params.id, req.body);
-            res.redirect('/centralize/skills');
+            res.redirect('/centralize/skills?success=' + encodeURIComponent('Skill updated successfully!'));
         } catch (error) {
             console.error('Error updating skill:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/skills?error=' + encodeURIComponent('Failed to update skill: ' + error.message));
         }
     }
 
@@ -67,10 +67,10 @@ export class AdminSkillController {
         try {
             const { id } = req.params;
             await SkillModel.adminDeleteSkill(id);
-            res.redirect('/centralize/skills');
+            res.redirect('/centralize/skills?success=' + encodeURIComponent('Skill deleted successfully!'));
         } catch (error) {
             console.error('Error deleting skill:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/skills?error=' + encodeURIComponent('Failed to delete skill: ' + error.message));
         }
     }
 }

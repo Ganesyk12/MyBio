@@ -55,6 +55,80 @@
 
     <!-- custom-chart js -->
     <script src="/flat-able/dist/assets/js/pages/dashboard-main.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMsg = urlParams.get('success');
+            const errorMsg = urlParams.get('error');
+            const infoMsg = urlParams.get('info');
+            const warningMsg = urlParams.get('warning');
+
+            if (successMsg) {
+                Toast.fire({
+                    icon: 'success',
+                    title: successMsg
+                });
+            } else if (errorMsg) {
+                Toast.fire({
+                    icon: 'error',
+                    title: errorMsg
+                });
+            } else if (infoMsg) {
+                Toast.fire({
+                    icon: 'info',
+                    title: infoMsg
+                });
+            } else if (warningMsg) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: warningMsg
+                });
+            }
+
+            // Clean query parameters from URL without page reload
+            if (successMsg || errorMsg || infoMsg || warningMsg) {
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+
+            // Attach SweetAlert confirmation to delete forms
+            document.querySelectorAll('form[action*="/delete/"]').forEach(form => {
+                form.removeAttribute('onsubmit');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This record will be removed/deactivated!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

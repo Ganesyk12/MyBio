@@ -66,7 +66,7 @@
                         <div class="col-sm-10">
                             <% if (detail && detail.FilePath) { %>
                                 <div class="mb-2">
-                                    <img src="<%= detail.FilePath %>" alt="Current Image" class="img-thumbnail" style="max-height: 100px;">
+                                    <img src="<%= detail.FilePath %>" alt="Current Image" class="img-thumbnail" style="max-height: 100px;" onerror="this.onerror=null; this.src='/img/nothing.png';">
                                 </div>
                             <% } %>
                             <input type="file" class="form-control-file" id="FileImage" name="FileImage" accept="image/*">

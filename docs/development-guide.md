@@ -72,11 +72,16 @@ pnpm start
 |----------|----------|-------------|
 | `PORT` | No (default 5000) | App listen port |
 | `DATABASE_URL` | Yes | PostgreSQL connection (Supabase) |
-| `HOST_UPLOAD_PATH` | Yes (prod) | Host path mounted to container for uploads (sesuaikan path VPS) |
+| `HOST_UPLOAD_PATH` | No (local/fallback) | Host path mounted to container for uploads |
 | `JWT_SECRET` | Yes | JWT signing secret |
 | `JWT_EXPIRATION` | No (default 24h) | Token expiry |
+| `R2_ACCOUNT_ID` | Optional / Recommended | Cloudflare Account ID for R2 storage |
+| `R2_ACCESS_KEY_ID` | Optional / Recommended | Cloudflare R2 Access Key ID |
+| `R2_SECRET_ACCESS_KEY` | Optional / Recommended | Cloudflare R2 Secret Access Key |
+| `R2_BUCKET_NAME` | Optional / Recommended | Cloudflare R2 Bucket Name |
+| `R2_PUBLIC_DOMAIN` | Optional / Recommended | Public access domain URL for R2 (e.g. `https://media.domain.com`) |
 
-> Upload path di dalam container sudah hardcode `/app/uploads` — tidak perlu env var.
+> Catatan Storage: Jika variabel `R2_*` diset lengkap, upload media portfolio dan CV akan otomatis disimpan langsung di Cloudflare R2. Jika tidak diisi, sistem otomatis fallback ke local storage `/app/uploads`.
 
 ## Email Forwarding
 
@@ -106,6 +111,11 @@ Cron job runs daily at 06:00 AM (Asia/Jakarta). Forwards unread messages from `E
 | `DATABASE_URL` | PostgreSQL connection string |
 | `HOST_UPLOAD_PATH` | Host upload directory (e.g. `/var/www/html/Portfolio/uploads`) |
 | `JWT_SECRET` | JWT signing secret |
+| `R2_ACCOUNT_ID` | Cloudflare Account ID for R2 storage (optional) |
+| `R2_ACCESS_KEY_ID` | Cloudflare R2 Access Key ID (optional) |
+| `R2_SECRET_ACCESS_KEY` | Cloudflare R2 Secret Access Key (optional) |
+| `R2_BUCKET_NAME` | Cloudflare R2 Bucket Name (optional) |
+| `R2_PUBLIC_DOMAIN` | Public access domain URL for R2 (optional) |
 
 ### Deploy Steps (Manual Trigger)
 

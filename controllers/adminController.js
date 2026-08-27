@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prismaClient.js";
 import { withTimeout } from "../utils/withTimeout.js";
+import { isR2Configured, uploadToR2, checkR2FileExists, getPublicUrl } from "../services/r2Service.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -53,9 +54,17 @@ export class AdminController {
                 }
             }));
 
-            const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
-            const cvPath = path.join(cvUploadDir, 'cv.pdf');
-            const cvExists = fs.existsSync(cvPath);
+            let cvExists = false;
+            let cvUrl = '/uploads/cv.pdf';
+
+            if (isR2Configured()) {
+                cvExists = await checkR2FileExists('uploads/cv.pdf');
+                cvUrl = getPublicUrl('uploads/cv.pdf');
+            } else {
+                const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
+                const cvPath = path.join(cvUploadDir, 'cv.pdf');
+                cvExists = fs.existsSync(cvPath);
+            }
 
             res.render('admin/dashboard', {
                 title: 'Admin Dashboard | MyBio',
@@ -71,6 +80,7 @@ export class AdminController {
                 recentMessages,
                 projectTypes,
                 cvExists,
+                cvUrl,
                 error: req.query.error,
                 success: req.query.success
             });
@@ -85,10 +95,27 @@ export class AdminController {
             if (!req.file) {
                 return res.redirect('/centralize?error=No+file+uploaded');
             }
+
+            if (isR2Configured()) {
+                await uploadToR2({
+                    fileBuffer: req.file.buffer,
+                    fileName: 'cv.pdf',
+                    contentType: 'application/pdf',
+                    folder: 'uploads'
+                });
+            } else {
+                const cvUploadDir = process.env.NODE_ENV === 'production' ? '/app/uploads' : path.join(__dirname, '../public/uploads');
+                if (!fs.existsSync(cvUploadDir)) {
+                    fs.mkdirSync(cvUploadDir, { recursive: true });
+                }
+                fs.writeFileSync(path.join(cvUploadDir, 'cv.pdf'), req.file.buffer);
+            }
+
             res.redirect('/centralize?success=CV+uploaded+successfully');
         } catch (error) {
             console.error('Error in postUploadCV:', error);
-            res.redirect('/centralize?error=Internal+Server+Error');
+            res.redirect('/centralize?error=Internal+Server+Error:+' + encodeURIComponent(error.message));
         }
     }
 }
+

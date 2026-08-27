@@ -58,6 +58,24 @@
                             </tbody>
                         </table>
                     </div>
+                    <% const mainImage = project.ProjectDetail && project.ProjectDetail.length > 0 ? project.ProjectDetail[0].FilePath : null; %>
+                    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                        <div class="border rounded p-3 bg-light text-center" style="max-width: 320px; width: 100%;">
+                            <h6 class="text-muted mb-2 font-weight-bold">Media Preview</h6>
+                            <a href="<%= mainImage || '/img/nothing.png' %>" target="_blank">
+                                <img src="<%= mainImage || '/img/nothing.png' %>" alt="<%= project.ProjectName %>" class="img-fluid rounded shadow-sm" style="max-height: 180px; width: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='/img/nothing.png';">
+                            </a>
+                            <% if (mainImage) { %>
+                                <div class="mt-2">
+                                    <a href="<%= mainImage %>" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="feather icon-external-link mr-1"></i> Open Original Media
+                                    </a>
+                                </div>
+                            <% } else { %>
+                                <span class="badge badge-light-secondary mt-2">Default (No Media)</span>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
 
                 <hr>
@@ -70,8 +88,9 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
+                                    <th>Media Preview</th>
                                     <th>Description</th>
-                                    <th>File Path</th>
+                                    <th>File Path / URL</th>
                                     <th>Link</th>
                                     <th>Related Skill</th>
                                     <th>Date Created</th>
@@ -81,12 +100,17 @@
                                 <% project.ProjectDetail.forEach((detail, idx) => { %>
                                     <tr>
                                         <td><%= idx + 1 %></td>
+                                        <td class="text-center" style="width: 100px;">
+                                            <a href="<%= detail.FilePath || '/img/nothing.png' %>" target="_blank">
+                                                <img src="<%= detail.FilePath || '/img/nothing.png' %>" alt="Preview" class="img-thumbnail" style="max-height: 60px; object-fit: cover;" onerror="this.onerror=null; this.src='/img/nothing.png';">
+                                            </a>
+                                        </td>
                                         <td><%= detail.Description || '-' %></td>
-                                        <td>
+                                        <td style="max-width: 220px; word-break: break-all;">
                                             <% if(detail.FilePath) { %>
                                                 <a href="<%= detail.FilePath %>" target="_blank" class="text-primary"><%= detail.FilePath %></a>
                                             <% } else { %>
-                                                -
+                                                <span class="text-muted">-</span>
                                             <% } %>
                                         </td>
                                         <td>

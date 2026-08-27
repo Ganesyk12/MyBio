@@ -27,6 +27,16 @@ on:
         required: true
       JWT_SECRET:
         required: true
+      R2_ACCOUNT_ID:
+        required: false
+      R2_ACCESS_KEY_ID:
+        required: false
+      R2_SECRET_ACCESS_KEY:
+        required: false
+      R2_BUCKET_NAME:
+        required: false
+      R2_PUBLIC_DOMAIN:
+        required: false
 
 jobs:
     deploy:
@@ -58,6 +68,11 @@ jobs:
                 -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
                 -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
                 -e JWT_EXPIRATION="24h" \
+                -e R2_ACCOUNT_ID="${{ secrets.R2_ACCOUNT_ID }}" \
+                -e R2_ACCESS_KEY_ID="${{ secrets.R2_ACCESS_KEY_ID }}" \
+                -e R2_SECRET_ACCESS_KEY="${{ secrets.R2_SECRET_ACCESS_KEY }}" \
+                -e R2_BUCKET_NAME="${{ secrets.R2_BUCKET_NAME }}" \
+                -e R2_PUBLIC_DOMAIN="${{ secrets.R2_PUBLIC_DOMAIN }}" \
                 --restart unless-stopped \
                 "$IMAGE_TAG"
               echo "Deployment completed successfully."

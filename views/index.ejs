@@ -10,7 +10,7 @@
                 <div class="cta-buttons" data-aos="fade-up" data-aos-delay="300">
                     <a href="/#portfolio" class="btn btn-primary btn-lg px-4">View My Work</a>
                     <% if (typeof cvExists !== 'undefined' && cvExists) { %>
-                        <a href="/uploads/cv.pdf" download class="btn btn-outline-light btn-lg px-4"><i class="bi bi-download me-2"></i>Download My CV</a>
+                        <a href="<%= typeof cvUrl !== 'undefined' ? cvUrl : '/uploads/cv.pdf' %>" target="_blank" download class="btn btn-outline-light btn-lg px-4"><i class="bi bi-download me-2"></i>Download My CV</a>
                     <% } else { %>
                         <a href="/contact" class="btn btn-outline-light btn-lg px-4">Let's Connect</a>
                     <% } %>

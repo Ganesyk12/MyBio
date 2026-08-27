@@ -20,10 +20,10 @@ export class AdminMessageController {
         try {
             const { id } = req.params;
             await EmailModel.adminDeleteMessage(id);
-            res.redirect('/centralize/messages');
+            res.redirect('/centralize/messages?success=' + encodeURIComponent('Message deleted successfully!'));
         } catch (error) {
             console.error('Error deleting message:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/messages?error=' + encodeURIComponent('Failed to delete message: ' + error.message));
         }
     }
 }

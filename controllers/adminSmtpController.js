@@ -31,10 +31,10 @@ export class AdminSmtpController {
     static async postCreate(req, res) {
         try {
             await SmtpModel.adminCreateSmtp(req.body);
-            res.redirect('/centralize/smtp');
+            res.redirect('/centralize/smtp?success=' + encodeURIComponent('SMTP configuration created successfully!'));
         } catch (error) {
             console.error('Error creating SMTP:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/smtp?error=' + encodeURIComponent('Failed to create SMTP config: ' + error.message));
         }
     }
 
@@ -57,20 +57,20 @@ export class AdminSmtpController {
     static async postEdit(req, res) {
         try {
             await SmtpModel.adminUpdateSmtp(req.params.id, req.body);
-            res.redirect('/centralize/smtp');
+            res.redirect('/centralize/smtp?success=' + encodeURIComponent('SMTP configuration updated successfully!'));
         } catch (error) {
             console.error('Error updating SMTP:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/smtp?error=' + encodeURIComponent('Failed to update SMTP config: ' + error.message));
         }
     }
 
     static async delete(req, res) {
         try {
             await SmtpModel.adminDeleteSmtp(req.params.id);
-            res.redirect('/centralize/smtp');
+            res.redirect('/centralize/smtp?success=' + encodeURIComponent('SMTP configuration deleted successfully!'));
         } catch (error) {
             console.error('Error deleting SMTP:', error);
-            res.status(500).send('Internal Server Error');
+            res.redirect('/centralize/smtp?error=' + encodeURIComponent('Failed to delete SMTP config: ' + error.message));
         }
     }
 }

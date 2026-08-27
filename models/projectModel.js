@@ -4,17 +4,15 @@ import { withTimeout } from "../utils/withTimeout.js";
 export class ProjectModel {
     static async getProjectType() {
         try {
-            const type = await withTimeout(
-                prisma.projectType.findMany({
-                    orderBy: { TypeName: 'asc' },
-                    select: {
-                        IdType: true,
-                        TypeName: true
-                    }
-                }));
-            // Ambil semua project dan detail + type-nya
+            // Ambil semua project aktif yang memiliki ProjectDetail
             const project = await withTimeout(
                 prisma.project.findMany({
+                    where: {
+                        Status: 'A',
+                        ProjectDetail: {
+                            some: {} // Hanya project yang memiliki minimal 1 ProjectDetail
+                        }
+                    },
                     orderBy: { IdProject: 'asc' },
                     select: {
                         IdProject: true,
@@ -34,16 +32,39 @@ export class ProjectModel {
                     }
                 })
             );
+
+            // Ambil ProjectType yang memiliki project aktif dengan detail
+            const type = await withTimeout(
+                prisma.projectType.findMany({
+                    where: {
+                        Project: {
+                            some: {
+                                Status: 'A',
+                                ProjectDetail: {
+                                    some: {}
+                                }
+                            }
+                        }
+                    },
+                    orderBy: { TypeName: 'asc' },
+                    select: {
+                        IdType: true,
+                        TypeName: true
+                    }
+                })
+            );
+
             // Gabungkan data ProjectType ke dalam tiap project
             const formattedProjects = project.map(p => ({
                 IdProject: p.IdProject,
                 ProjectName: p.ProjectName,
-                TypeName: p.ProjectType.TypeName,
-                IdType: p.ProjectType.IdType,
-                FilePath: p.ProjectDetail?.[0]?.FilePath || null
+                TypeName: p.ProjectType?.TypeName || '',
+                IdType: p.ProjectType?.IdType || 0,
+                FilePath: p.ProjectDetail?.[0]?.FilePath || '/img/nothing.png'
             }));
             return { type, project: formattedProjects };
         } catch (error) {
+            console.error("Error getProjectType:", error);
             throw new Error("Failed to retrieve type");
         }
     }
