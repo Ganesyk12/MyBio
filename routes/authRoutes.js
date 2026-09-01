@@ -11,6 +11,11 @@ router.post('/login', AuthController.login);
 // Logout Route
 router.get('/logout', AuthController.logout);
 
+// Forgot Password Routes
+router.get('/forgot-password', redirectIfAuthenticated, AuthController.getForgotPassword);
+router.post('/forgot-password', AuthController.forgotPassword);
+router.post('/reset-password', AuthController.resetPassword);
+
 // Register Routes (Hidden)
 router.get('/register', redirectIfAuthenticated, AuthController.getRegister);
 router.post('/register', AuthController.register);

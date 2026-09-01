@@ -91,6 +91,110 @@ export class AuthController {
     }
 
     /**
+     * Render Forgot Password Page
+     */
+    static async getForgotPassword(req, res) {
+        res.render('auth/forgot', {
+            title: 'Forgot Password | Admin Panel',
+            layout: false,
+            step: 1,
+            username: req.query.username || '',
+            error: req.query.error || null,
+            success: req.query.success || null
+        });
+    }
+
+    /**
+     * Validate Username for Password Reset (Step 1)
+     */
+    static async forgotPassword(req, res) {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.redirect('/forgot-password?error=Username is required');
+        }
+
+        try {
+            const user = await prisma.userLogin.findUnique({
+                where: { UserName: username }
+            });
+
+            if (!user) {
+                return res.redirect('/forgot-password?error=Username not found');
+            }
+
+            if (user.Status !== 'A') {
+                return res.redirect('/forgot-password?error=Account is inactive');
+            }
+
+            // Username valid -> show reset password form (Step 2)
+            res.render('auth/forgot', {
+                title: 'Reset Password | Admin Panel',
+                layout: false,
+                step: 2,
+                username,
+                error: null,
+                success: null
+            });
+        } catch (error) {
+            console.error('Forgot Password Error:', error);
+            res.redirect('/forgot-password?error=Server error, please try again later');
+        }
+    }
+
+    /**
+     * Reset Password with New Password (Step 2)
+     */
+    static async resetPassword(req, res) {
+        const { username, password, confirmPassword } = req.body;
+
+        try {
+            if (!username || !password) {
+                return res.redirect('/forgot-password?error=All fields are required');
+            }
+
+            if (password !== confirmPassword) {
+                return res.redirect(`/forgot-password?error=Passwords do not match&username=${encodeURIComponent(username)}`);
+            }
+
+            if (password.length < 6) {
+                return res.redirect(`/forgot-password?error=Password must be at least 6 characters&username=${encodeURIComponent(username)}`);
+            }
+
+            const user = await prisma.userLogin.findUnique({
+                where: { UserName: username }
+            });
+
+            if (!user) {
+                return res.redirect('/forgot-password?error=Username not found');
+            }
+
+            if (user.Status !== 'A') {
+                return res.redirect('/forgot-password?error=Account is inactive');
+            }
+
+            // Hash new password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            // Update password
+            await prisma.userLogin.update({
+                where: { IdUserLogin: user.IdUserLogin },
+                data: {
+                    Password: hashedPassword,
+                    ModifiedBy: username,
+                    DateModified: new Date()
+                }
+            });
+
+            res.redirect('/login?success=Password reset successful. Please login with your new password.');
+        } catch (error) {
+            console.error('Reset Password Error:', error);
+            res.redirect('/forgot-password?error=Server error, please try again later');
+        }
+    }
+
+    /**
      * Handle Registration Process
      */
     static async register(req, res) {
