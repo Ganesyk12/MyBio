@@ -1,8 +1,45 @@
-# Keep environment variables out of version control
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
-/generated/prisma
+
+# Prisma generated & Database files
+/generated/prisma/
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploads & Media
 local-uploads/
 uploads/
 /public/img/portfolio/*
 !/public/img/portfolio/.gitkeep
+
+# Residual package manager files (Project uses Bun)
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# Temporary & Audit files
+audit-trait.txt
+*.tmp
+*.temp
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI / Agent data
+.agents/
+.gemini/

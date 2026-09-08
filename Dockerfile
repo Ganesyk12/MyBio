@@ -3,7 +3,7 @@ FROM oven/bun:1-alpine AS build
 WORKDIR /app
 
 # Install build tools & runtime libs needed for native deps (bcrypt) & Prisma
-RUN apk add --no-cache openssl libc6-compat gcompat python3 make g++ git
+RUN apk add --no-cache openssl libc6-compat gcompat python3 make g++
 
 # Copy manifest files
 COPY package.json bun.lock .npmrc ./
